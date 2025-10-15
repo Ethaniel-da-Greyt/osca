@@ -17,7 +17,7 @@
     </div>
 
     <div class="card mt-4 shadow-sm border-0">
-        <div class="card-header bg-white fw-bold">Recent Added</div>
+        <div class="card-header bg-white fw-bold">Recently Added</div>
         <div class="card-body">
             <?php if (empty($new_add)): ?>
                 <h6 class="card-title text-muted text-center">No records found.</h6>
@@ -64,6 +64,10 @@
 
             <?php endif ?>
         </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+        <?= $pager->links('default', 'bootstrap_full') ?>
     </div>
 </div>
 

@@ -14,6 +14,9 @@
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="<?= base_url('css/all.min.css') ?>">
 
+    <!-- Select2 CSS -->
+    <link href="<?= base_url('css/select2.min.css') ?>" rel="stylesheet" />
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -65,8 +68,8 @@
         <h4 class="text-center mb-4">Office of the Senior Citizen Affairs</h4>
         <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
         <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
-        <a href="#" class="<?= $this->renderSection('addrecord') ?>"><i class="fa fa-box"></i> Add Records</a>
-        <a href="#" class="<?= $this->renderSection('manage') ?>"><i class="fa fa-chart-bar"></i> Manage SC Records</a>
+        <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
+        <a href="/osca/manage-record" class="<?= $this->renderSection('manage') ?>"><i class="fa fa-chart-bar"></i> Manage SC Records</a>
         <a href="#" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
     </div>
 
@@ -98,10 +101,35 @@
             </div>
         </nav>
 
+        <script src="<?= base_url('js/jquery.min.js') ?>"></script>
+
+        <!-- Select2 JS -->
+        <script src="<?= base_url('js/select2.full.min.js') ?>"></script>
         <!-- Main Content -->
         <?= $this->renderSection('content') ?>
     </div>
 
+    <script src="<?= base_url('js/sweetalert2.all.min.js') ?>"></script>
+
+    <?php if (session()->getFlashdata('success')): ?>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '<?= session()->getFlashdata('success') ?>',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        </script>
+    <?php elseif (session()->getFlashdata('error')): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '<?= session()->getFlashdata('error') ?>',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+        </script>
+    <?php endif ?>
     <!-- ✅ Bootstrap JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>

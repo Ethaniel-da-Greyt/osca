@@ -63,12 +63,16 @@
                             <td><?= esc($n['sex']) ?></td>
                             <td><?= esc($n['barangay']) ?></td>
                             <td><?= esc($n['unit']) ?></td>
-                            <td><?= esc($n['birthdate']) ?></td>
+                            <td><?= esc(date('F d, Y', strtotime($n['birthdate']))) ?></td>
                             <td><?= esc($n['age']) ?></td>
                             <td><?= esc($n['osca_id']) ?></td>
                             <td><?= esc($n['remarks']) ?></td>
-                            <td><?= esc($n['date_issued']) ?></td>
-                            <td><?= esc($n['date_applied']) ?></td>
+                            <td><?= esc(!empty($n['date_issued'])
+                                    ? date('F d, Y', strtotime($n['date_issued']))
+                                    : 'N/A') ?></td>
+                            <td><?= esc(!empty($n['date_applied'])
+                                    ? date('F d, Y', strtotime($n['date_issued']))
+                                    : 'N/A') ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

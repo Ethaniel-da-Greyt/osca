@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Dashboard' ?></title>
+    <link rel="shortcut icon" href="<?= base_url('logo/osca_logo.png') ?>" type="image/x-icon">
+
 
     <!-- ✅ Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
@@ -122,7 +124,7 @@
         </div>
     </div>
 
-    <!-- ✅ Content Wrapper -->
+    <!-- Content Wrapper -->
     <div class="content">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 p-3 rounded">
             <div class="container-fluid">

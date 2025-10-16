@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OSCA System | Login</title>
+    <link rel="shortcut icon" href="<?= base_url('logo/osca_logo.png') ?>" type="image/x-icon">
+
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('css/all.min.css') ?>">
     <style>

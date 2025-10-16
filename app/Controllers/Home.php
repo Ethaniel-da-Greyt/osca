@@ -7,6 +7,10 @@ use App\Models\MasterListModel;
 
 class Home extends BaseController
 {
+    public function loginPage()
+    {
+        return view('login');
+    }
     public function index()
     {
 

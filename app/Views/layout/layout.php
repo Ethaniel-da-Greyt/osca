@@ -93,20 +93,32 @@
 <body>
 
     <!-- ✅ Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar d-flex flex-column justify-content-between">
         <div>
-            <h4>Office of the Senior Citizen Affairs</h4>
-            <div>
-                <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
-                <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
-                <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
-                <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
+            <div class="text-center mb-3">
+                <img src="<?= base_url('logo/osca_logo.png') ?>" alt="OSCA Logo"
+                    style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;">
+                <h6 class="mt-2">Office of the Senior Citizens Affairs</h6>
             </div>
+
+            <a href="/" class="<?= $this->renderSection('dashboard') ?>">
+                <i class="fa fa-gauge"></i> Dashboard
+            </a>
+            <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>">
+                <i class="fa fa-users"></i> Senior Citizen Lists
+            </a>
+            <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>">
+                <i class="fa-solid fa-plus"></i> Add Records
+            </a>
+            <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
+                <i class="fa fa-gear"></i> Export/Print Records
+            </a>
         </div>
 
-        <!-- ✅ Logout stays at the bottom -->
-        <div class="logout-section">
-            <a href="/logout" class="<?= $this->renderSection('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <div class="logout-section text-center mt-auto mb-3">
+            <a href="/logout" class="text-danger fw-semibold" style="color: #f8d7da !important;">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
         </div>
     </div>
 

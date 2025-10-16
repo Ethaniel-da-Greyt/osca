@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+$routes->get('/login', 'Home::loginPage');
 
-$routes->get('/test', 'ScController::test');
 $routes->get('/', 'Home::index');
 $routes->get('/osca/sc-list', 'Home::scList');
 $routes->get('/osca/add-record', 'Home::addrecord');

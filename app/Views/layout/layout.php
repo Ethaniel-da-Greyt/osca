@@ -7,11 +7,9 @@
     <title><?= $title ?? 'Dashboard' ?></title>
 
     <!-- ✅ Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
 
     <!-- ✅ Font Awesome Icons -->
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="<?= base_url('css/all.min.css') ?>">
 
     <!-- Select2 CSS -->
@@ -25,6 +23,8 @@
     <style>
         body {
             background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
         }
 
         .sidebar {
@@ -35,6 +35,9 @@
             left: 0;
             background-color: #343a40;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             padding-top: 1rem;
         }
 
@@ -53,6 +56,12 @@
             color: #fff;
         }
 
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
         .content {
             margin-left: 250px;
             padding: 20px;
@@ -63,6 +72,21 @@
             top: 0;
             z-index: 1020;
         }
+
+        .logout-section {
+            border-top: 1px solid #495057;
+            padding-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logout-section a {
+            color: #ff6b6b !important;
+        }
+
+        .logout-section a:hover {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
     </style>
 </head>
 
@@ -70,47 +94,32 @@
 
     <!-- ✅ Sidebar -->
     <div class="sidebar">
-        <h4 class="text-center mb-4">Office of the Senior Citizen Affairs</h4>
-        <div class="">
-            <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
-            <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
-            <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
-            <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
+        <div>
+            <h4>Office of the Senior Citizen Affairs</h4>
+            <div>
+                <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
+                <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
+                <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
+                <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
+            </div>
         </div>
 
-        <div class="">
-
+        <!-- ✅ Logout stays at the bottom -->
+        <div class="logout-section">
+            <a href="/logout" class="<?= $this->renderSection('logout') ?>"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </div>
     </div>
 
     <!-- ✅ Content Wrapper -->
     <div class="content">
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 p-3 rounded">
             <div class="container-fluid">
                 <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" id="sidebarToggle">
                     <i class="fa fa-bars"></i>
                 </button>
                 <span class="navbar-brand">OSCA Management System</span>
-
-                <!-- <div class="ms-auto">
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="fa fa-user-circle fa-lg me-2"></i> Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </div>
-                </div> -->
             </div>
         </nav>
-
 
         <!-- Main Content -->
         <?= $this->renderSection('content') ?>
@@ -137,8 +146,7 @@
             });
         </script>
     <?php endif ?>
-    <!-- ✅ Bootstrap JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
     <script>
         // Optional: mobile sidebar toggle

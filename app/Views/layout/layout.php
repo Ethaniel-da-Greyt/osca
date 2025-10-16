@@ -17,6 +17,11 @@
     <!-- Select2 CSS -->
     <link href="<?= base_url('css/select2.min.css') ?>" rel="stylesheet" />
 
+    <script src="<?= base_url('js/jquery.min.js') ?>"></script>
+
+    <!-- Select2 JS -->
+    <script src="<?= base_url('js/select2.full.min.js') ?>"></script>
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -66,11 +71,16 @@
     <!-- ✅ Sidebar -->
     <div class="sidebar">
         <h4 class="text-center mb-4">Office of the Senior Citizen Affairs</h4>
-        <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
-        <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
-        <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
-        <a href="/osca/manage-record" class="<?= $this->renderSection('manage') ?>"><i class="fa fa-chart-bar"></i> Manage SC Records</a>
-        <a href="#" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
+        <div class="">
+            <a href="/" class="<?= $this->renderSection('dashboard') ?>"><i class="fa fa-gauge"></i> Dashboard</a>
+            <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>"><i class="fa fa-users"></i> Senior Citizen Lists</a>
+            <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>"><i class="fa-solid fa-plus"></i> Add Records</a>
+            <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>"><i class="fa fa-gear"></i> Export/Print Records</a>
+        </div>
+
+        <div class="">
+
+        </div>
     </div>
 
     <!-- ✅ Content Wrapper -->
@@ -101,10 +111,7 @@
             </div>
         </nav>
 
-        <script src="<?= base_url('js/jquery.min.js') ?>"></script>
 
-        <!-- Select2 JS -->
-        <script src="<?= base_url('js/select2.full.min.js') ?>"></script>
         <!-- Main Content -->
         <?= $this->renderSection('content') ?>
     </div>

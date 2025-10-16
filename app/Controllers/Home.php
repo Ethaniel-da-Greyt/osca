@@ -18,7 +18,7 @@ class Home extends BaseController
             $startOfMonth = date('Y-m-01');
             $endOfMonth   = date('Y-m-t');
 
-            // 🔹 Paginate only current month's records
+            // Paginate only current month's records
             $list = $record
                 ->where('created_at >=', $startOfMonth)
                 ->where('created_at <=', $endOfMonth)
@@ -46,7 +46,7 @@ class Home extends BaseController
             return view('index', [
                 'new_add' => $list,
                 'units' => $units,
-                'pager' => $pager // 🔹 Pass the pager to view
+                'pager' => $pager // Pass the pager to view
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -59,39 +59,7 @@ class Home extends BaseController
             $records = new MasterListModel();
             $barangay = new BarangayListModel();
 
-            $barangaylist = $barangay->findAll();
-            $filter = $this->request->getGet('filter');
-
-            $search = $this->request->getGet('search');
-            if (!empty($search)) {
-                $list = $records->where('isDelete', 0)
-                    ->groupStart()
-                    ->like('lastname', $search)
-                    ->orLike('firstname', $search)
-                    ->orLike('middle_name', $search)
-                    ->orLike('osca_id', $search)
-                    ->groupEnd();
-            } elseif (!empty($filter)) {
-                $list = $records->where('isDelete', 0)->where('barangay', $filter);
-            } else {
-                $list = $records->where('isDelete', 0);
-            }
-
-            $query = $list->findAll();
-
-            return view('contents/sclist', ['lists' => $query, 'barangay' => $barangaylist, 'filter' => $filter]);
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    public function manageRecord()
-    {
-        try {
-            $records = new MasterListModel();
-            $barangay = new BarangayListModel();
-
-            $barangaylist = $barangay->findAll();
+            $barangaylist = $barangay->orderBy('barangay', 'ASC')->findAll();
             $filter = $this->request->getGet('filter');
             $search = $this->request->getGet('search');
 
@@ -117,12 +85,31 @@ class Home extends BaseController
 
             $pager = $records->pager;
 
-            return view('contents/manage_record', [
+            return view('contents/sclist', [
                 'lists' => $query,
                 'barangay' => $barangaylist,
                 'filter' => $filter,
                 'pager' => $pager,
                 'search' => $search,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function manageRecord($id)
+    {
+        try {
+            $records = new MasterListModel();
+            $barangay = new BarangayListModel();
+
+            $barangaylist = $barangay->findAll();
+
+            $list = $records->where('isDelete', 0)->where('id', $id)->first();
+
+            return view('contents/manage_record', [
+                'n' => $list,
+                'barangay' => $barangaylist,
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -138,6 +125,18 @@ class Home extends BaseController
             $barangaylist = $barangay->findAll();
 
             return view('contents/add_record', ['barangay' => $barangaylist]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function exportView()
+    {
+        try {
+            $barangay = new BarangayListModel();
+
+            $barangaylist = $barangay->orderBy('barangay', 'ASC')->findAll();
+            return view('contents/export_print', ['barangay' => $barangaylist]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-4">
                     <label for="" class="form-label fw-semibold">Name Extension</label>
-                    <input type="text" name="" class="form-control" placeholder="ex. Jr. Sr. III">
+                    <input type="text" name="suffix" class="form-control" placeholder="ex. Jr. Sr. III">
                 </div>
                 <div class="col-4">
                     <label for="" class="form-label fw-semibold">Sex</label>

@@ -35,7 +35,7 @@
     <div class="card-header bg-white fw-bold">Senior Citizen Lists</div>
     <div class="card-body">
         <?php if (!empty($lists)) : ?>
-            <table class="table table-responsive">
+            <table class="table table-responsive table-bordered table-hover">
                 <thead class=" table-dark">
                     <tr>
                         <th>Last Name</th>
@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($lists as $n): ?>
-                        <tr>
+                        <tr class="t-row" onclick="window.location.href='<?= base_url('/osca/manage-record/' . $n['id']) ?>'" style="cursor: pointer;">
                             <td><?= esc($n['lastname']) ?></td>
                             <td><?= esc($n['firstname']) ?></td>
                             <td><?= esc($n['middle_name']) ?></td>
@@ -80,6 +80,10 @@
         <?php else: ?>
             <h6 class="card-title text-muted text-center">No record found.</h6>
         <?php endif ?>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <?= $pager->links('default', 'bootstrap_full') ?>
     </div>
 </div>
 <?= $this->endSection() ?>

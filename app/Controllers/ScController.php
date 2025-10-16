@@ -46,6 +46,40 @@ class ScController extends BaseController
         }
     }
 
+    public function update()
+    {
+        try {
+            $model = new MasterListModel();
+
+            $id = $this->request->getPost('id');
+
+            $birthdate = $this->request->getPost('birthdate');
+            $age = $this->calculateAge($birthdate);
+
+            $data = [
+                'lastname'     => $this->request->getPost('lastname'),
+                'firstname'    => $this->request->getPost('firstname'),
+                'middle_name'  => $this->request->getPost('middle_name'),
+                'suffix'       => $this->request->getPost('suffix'),
+                'sex'          => $this->request->getPost('sex'),
+                'barangay'     => $this->request->getPost('barangay'),
+                'unit'         => $this->request->getPost('unit'),
+                'birthdate'    => $birthdate,
+                'age'          => $age,
+                'osca_id'      => $this->request->getPost('osca_id'),
+                'date_issued'  => $this->request->getPost('date_issued') ?: null,
+                'date_applied' => $this->request->getPost('date_applied') ?: null,
+                'remarks'      => $this->request->getPost('remarks'),
+            ];
+
+            $model->update($id, $data);
+
+            return redirect()->back()->with('success', 'Record updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     // Helper function to compute age
     private function calculateAge($birthdate)
     {

@@ -17,7 +17,7 @@ class SeniorCitizenSeeder extends Seeder
 
         $data = [];
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $birthdate = $faker->dateTimeBetween('-100 years', '-60 years')->format('Y-m-d');
             $age = date('Y') - date('Y', strtotime($birthdate));
 
@@ -28,7 +28,7 @@ class SeniorCitizenSeeder extends Seeder
                 'lastname'      => $faker->lastName,
                 'middle_name'   => $faker->lastName,
                 'suffix'        => $faker->randomElement(['', 'Jr.', 'Sr.', 'III']),
-                'sex'           => $faker->randomElement(['Male', 'Female']),
+                'sex'           => $faker->randomElement(['M', 'F']),
                 'barangay'      => $randomBU['barangay'],
                 'unit'          => $randomBU['unit'],
                 'birthdate'     => $birthdate,

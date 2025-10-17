@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSCA System | Login</title>
+    <title>OSCA System | Register</title>
     <link rel="shortcut icon" href="<?= base_url('logo/osca_logo.png') ?>" type="image/x-icon">
 
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
@@ -34,7 +34,7 @@
         }
 
         .login-header h3 {
-            color: #198754;
+            color: #007bff;
             font-weight: 700;
         }
 
@@ -71,23 +71,15 @@
             <p class="text-muted mb-0">Office of the Senior Citizens Affairs</p>
         </div>
 
-        <form action="<?= base_url('/login') ?>" method="post">
-            <?php if (session()->getFlashdata('error')): ?>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><i class="fa-solid fa-triangle-exclamation"></i>
-                        <?= esc(session()->getFlashdata('error')) ?></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><i class="fa-solid fa-circle-check"></i></strong>
-                    <?= esc(session()->getFlashdata('success')) ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-
+        <form action="<?= base_url('osca-register') ?>" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">First Name</label>
+                <input type="text" id="username" name="firstname" class="form-control" placeholder="Enter your First Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">Last Name</label>
+                <input type="text" id="username" name="lastname" class="form-control" placeholder="Enter your Last Name" required>
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label fw-semibold">Username</label>
                 <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
@@ -98,7 +90,12 @@
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
             </div>
 
-            <button type="submit" class="btn btn-success fw-semibold">Login</button>
+            <div class="mb-3">
+                <label for="password" class="form-label fw-semibold">Confirm Password</label>
+                <input type="password" id="password" name="confirm_pass" class="form-control" placeholder="Confirm password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary fw-semibold form-control">Register</button>
         </form>
 
         <div class="footer-text">
@@ -108,7 +105,7 @@
 
     <script src="<?= base_url('js/sweetalert2.all.min.js') ?>"></script>
 
-    <!-- <?php if (session()->getFlashdata('success')): ?>
+    <?php if (session()->getFlashdata('success')): ?>
         <script>
             Swal.fire({
                 icon: 'success',
@@ -126,7 +123,7 @@
                 timer: 2000,
             });
         </script>
-    <?php endif ?> -->
+    <?php endif ?>
 
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
 

@@ -49,8 +49,8 @@
                         <th>Age</th>
                         <th>OSCA ID No.</th>
                         <th>Remarks</th>
-                        <th>Date Issued</th>
                         <th>Date Applied</th>
+                        <th>Date Issued</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,10 +67,10 @@
                             <td><?= esc($n['age']) ?></td>
                             <td><?= esc($n['osca_id']) ?></td>
                             <td><?= esc($n['remarks']) ?></td>
-                            <td><?= esc(!empty($n['date_issued'])
-                                    ? date('F d, Y', strtotime($n['date_issued']))
-                                    : 'N/A') ?></td>
                             <td><?= esc(!empty($n['date_applied'])
+                                    ? date('F d, Y', strtotime($n['date_applied']))
+                                    : 'N/A') ?></td>
+                            <td><?= esc(!empty($n['date_issued'])
                                     ? date('F d, Y', strtotime($n['date_issued']))
                                     : 'N/A') ?></td>
                         </tr>

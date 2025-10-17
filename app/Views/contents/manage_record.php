@@ -123,7 +123,7 @@
 
                 <div class="d-flex justify-content-end gap-2">
                     <button class="btn btn-primary" type="submit">Update Record</button>
-                    <span class="btn btn-secondary" data-bs-dismiss="modal">Cancel</span>
+                    <a href="<?= base_url('osca/sc-list') ?>" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
 

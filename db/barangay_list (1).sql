@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2025 at 10:59 AM
+-- Generation Time: Oct 17, 2025 at 04:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `osca_db`
 --
+CREATE DATABASE IF NOT EXISTS `osca_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `osca_db`;
 
 -- --------------------------------------------------------
 
@@ -91,6 +93,63 @@ INSERT INTO `barangay_list` (`id`, `unit`, `barangay`, `created_at`, `updated_at
 (49, 5, 'Sigayan', '2025-10-07 05:19:35', NULL),
 (50, 2, 'Tag-ulo', '2025-10-07 05:21:51', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `masterlist`
+--
+
+CREATE TABLE `masterlist` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `firstname` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
+  `middle_name` varchar(100) DEFAULT NULL,
+  `suffix` varchar(20) DEFAULT NULL,
+  `sex` varchar(5) NOT NULL,
+  `barangay` varchar(150) NOT NULL,
+  `unit` int(10) NOT NULL,
+  `birthdate` date NOT NULL,
+  `age` varchar(100) NOT NULL,
+  `osca_id` varchar(100) NOT NULL,
+  `remarks` text DEFAULT NULL,
+  `date_issued` date DEFAULT NULL,
+  `date_applied` date DEFAULT NULL,
+  `isDelete` tinyint(1) DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `version` varchar(255) NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `group` varchar(255) NOT NULL,
+  `namespace` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `batch` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `firstname` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `isDelete` tinyint(1) DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -102,6 +161,24 @@ ALTER TABLE `barangay_list`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `masterlist`
+--
+ALTER TABLE `masterlist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -110,6 +187,24 @@ ALTER TABLE `barangay_list`
 --
 ALTER TABLE `barangay_list`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT for table `masterlist`
+--
+ALTER TABLE `masterlist`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

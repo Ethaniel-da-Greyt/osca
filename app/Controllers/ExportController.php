@@ -80,7 +80,7 @@ class ExportController extends BaseController
         $sheet->getColumnDimension('B')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Senior_Citizen_Master_List_' . date('Y-m-d') . '.xlsx';
+        $filename = 'OSCA_MASTERLIST_' . date('Y-m-d') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -171,7 +171,7 @@ class ExportController extends BaseController
 
         // --- Output File ---
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Senior_Citizen_Master_List_' . ucfirst($barangay) . '_' . date('Y-m-d') . '.xlsx';
+        $filename = 'OSCA_MASTERLIST_BARANGAY_' . ucfirst($barangay) . '_' . date('Y-m-d') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -281,7 +281,7 @@ class ExportController extends BaseController
 
         // Output Excel
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Senior_Citizen_Master_List_' . strtoupper($unit) . '_' . date('Y-m-d') . '.xlsx';
+        $filename = 'OSCA_MASTERLIST_BARANGAY_UNIT_' . strtoupper($unit) . '_' . date('Y-m-d') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -325,7 +325,7 @@ class ExportController extends BaseController
         $dompdf->render();
 
         // ✅ VIEW IN BROWSER FIRST (NOT AUTO DOWNLOAD)
-        $filename = 'Senior_Citizen_Master_List_' . strtoupper($unit) . '_' . date('Y-m-d') . '.pdf';
+        $filename = 'OSCA_MASTERLIST_BARANGAY_' . strtoupper($unit) . '_' . date('Y-m-d') . '.pdf';
         $dompdf->stream($filename, ["Attachment" => false]); // <-- false = view first
 
         exit;
@@ -364,7 +364,7 @@ class ExportController extends BaseController
         $dompdf->render();
 
         // ✅ VIEW PDF IN BROWSER (not auto-download)
-        $filename = 'Senior_Citizen_Master_List_' . date('Y-m-d') . '.pdf';
+        $filename = 'OSCA_MASTERLIST_' . date('Y-m-d') . '.pdf';
         $dompdf->stream($filename, ["Attachment" => false]); // <-- view-only mode
         exit;
     }
@@ -391,6 +391,6 @@ class ExportController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        $dompdf->stream('Barangay_' . ucfirst($barangay) . '_List.pdf', ['Attachment' => false]);
+        $dompdf->stream('OSCA_BARANGAY_' . ucfirst($barangay) . '_LIST.pdf', ['Attachment' => false]);
     }
 }

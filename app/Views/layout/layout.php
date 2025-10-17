@@ -103,7 +103,7 @@
                 <h6 class="mt-2">Office of the Senior Citizens Affairs</h6>
             </div>
 
-            <a href="/" class="<?= $this->renderSection('dashboard') ?>">
+            <a href="/osca" class="<?= $this->renderSection('dashboard') ?>">
                 <i class="fa fa-gauge"></i> Dashboard
             </a>
             <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>">
@@ -118,7 +118,7 @@
         </div>
 
         <div class="logout-section text-center mt-auto mb-3">
-            <a href="/logout" class="text-danger fw-semibold" style="color: #f8d7da !important;">
+            <a href="/osca/logout" class="text-danger fw-semibold" style="color: #f8d7da !important;">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </a>
         </div>

@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-6">
                     <label for="barangay_unit" class="form-label fw-semibold">Barangay Unit</label>
-                    <input type="text" name="unit" id="barangay_unit" class="form-control" placeholder="Auto-filled Barangay Unit" readonly>
+                    <input type="text" name="unit" id="barangay_unit" class="form-control" placeholder="Auto-filled based on selected barangay" readonly>
                 </div>
             </div>
 

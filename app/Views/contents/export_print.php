@@ -60,7 +60,7 @@
                 </div>
                 <form action="/osca/export-record/barangay" method="post">
                     <div class="modal-body">
-                        <select name="barangay" id="" class="form-select">
+                        <select name="barangay" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay --</option>
                             <?php foreach ($barangay as $b) : ?>
                                 <option value="<?= esc($b['barangay']) ?>"><?= esc($b['barangay']) ?></option>
@@ -85,7 +85,7 @@
                 </div>
                 <form action="/osca/export-record/unit" method="post">
                     <div class="modal-body">
-                        <select name="unit" id="" class="form-select">
+                        <select name="unit" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay Unit --</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -113,7 +113,7 @@
                 </div>
                 <form action="/osca/export-record/pdf/unit" method="post">
                     <div class="modal-body">
-                        <select name="unit" id="" class="form-select">
+                        <select name="unit" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay Unit --</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -141,7 +141,7 @@
                 </div>
                 <form action="/osca/export-record/pdf/barangay" method="post">
                     <div class="modal-body">
-                        <select name="barangay" id="" class="form-select">
+                        <select name="barangay" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay --</option>
                             <?php foreach ($barangay as $b) : ?>
                                 <option value="<?= esc($b['barangay']) ?>"><?= esc($b['barangay']) ?></option>

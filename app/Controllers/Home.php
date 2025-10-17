@@ -11,6 +11,10 @@ class Home extends BaseController
     {
         return view('login');
     }
+    public function register()
+    {
+        return view('register');
+    }
     public function index()
     {
 
@@ -84,7 +88,7 @@ class Home extends BaseController
                 $list = $list->where('barangay', $filter);
             }
 
-            $query = $list->orderBy('created_at', 'DESC')
+            $query = $list->orderBy('lastname', 'ASC')
                 ->paginate($perPage);
 
             $pager = $records->pager;

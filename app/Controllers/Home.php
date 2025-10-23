@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\BarangayListModel;
 use App\Models\MasterListModel;
+use App\Models\UsersModel;
 
 class Home extends BaseController
 {
@@ -69,12 +70,12 @@ class Home extends BaseController
 
             $barangaylist = $barangay->orderBy('barangay', 'ASC')->findAll();
             $filter = $this->request->getGet('filter');
-            $search = $this->request->getGet('search');
 
             $perPage = 15;
 
             $list = $records->where('isDelete', 0);
 
+            $search = $this->request->getGet('search');
             if (!empty($search)) {
                 $list = $list->groupStart()
                     ->like('lastname', $search)
@@ -145,6 +146,70 @@ class Home extends BaseController
 
             $barangaylist = $barangay->orderBy('barangay', 'ASC')->findAll();
             return view('contents/export_print', ['barangay' => $barangaylist]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+
+    public function users()
+    {
+        try {
+            $model = new UsersModel();
+            $session = session();
+            $get = $session->get('isLoggedIn');
+            $user = $session->get('user');
+
+            if (!$get || $user['role'] !== 'admin') {
+                return redirect()->to('/login')->with('error', 'You must login as admin first.');
+            }
+
+            $search = $this->request->getGet('search');
+            $roleFilter = $this->request->getGet('role');
+            $statusFilter = $this->request->getGet('status');
+
+            if (!empty($search)) {
+                $model->groupStart()
+                    ->like('lastname', $search)
+                    ->orLike('firstname', $search)
+                    ->orLike('username', $search)
+                    ->groupEnd();
+            }
+
+            if (!empty($roleFilter) && $roleFilter !== 'all') {
+                $model->where('role', $roleFilter);
+            }
+
+            if ($statusFilter === 'active') {
+                $model->where('isDelete', 0);
+            } elseif ($statusFilter === 'inactive') {
+                $model->where('isDelete', 1);
+            }
+
+            $users = $model->findAll();
+
+            return view('contents/users', [
+                'users' => $users,
+                'search' => $search,
+                'roleFilter' => $roleFilter,
+                'statusFilter' => $statusFilter
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function manageUser($id)
+    {
+        try {
+            $user = new UsersModel();
+
+
+            $userInfo = $user->where('id', $id)->first();
+
+            return view('contents/manage_user', [
+                'n' => $userInfo,
+            ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

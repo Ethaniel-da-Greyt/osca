@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
     <div class="card mt-4 shadow-sm border-0 mb-5">
-        <div class="card-header bg-white fw-bold fs-5"><?= esc($n['firstname'] . " " . $n['lastname']) ?>'s Profile</div>
+        <div class="card-header bg-dark text-white fw-bold fs-5"><?= esc($n['firstname'] . " " . $n['lastname']) ?>'s Profile</div>
         <div class="card-body">
             <form action="/osca/manage-record" method="POST">
                 <input type="hidden" name="id" value="<?= esc($n['id']) ?>">

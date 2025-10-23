@@ -16,7 +16,7 @@
         <?php endforeach ?>
     </div>
 
-    <div class="card mt-4 shadow-sm border-0">
+    <div class="card mt-2 shadow-sm border-0">
         <div class="card-header bg-white fw-bold">Recently Added</div>
         <div class="card-body">
             <?php if (empty($new_add)): ?>

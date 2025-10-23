@@ -17,6 +17,7 @@ class UsersModel extends Model
         'lastname',
         'username',
         'password',
+        'role',
         'isDelete'
     ];
 

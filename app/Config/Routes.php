@@ -36,5 +36,13 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     $routes->post('export-record/pdf/barangay', 'ExportController::exportPdfByBarangay'); //Export PDF by Barangay
 
 
+    //admin
+    $routes->get('users', 'Home::users'); //View Users
+    $routes->get('manage-user/(:num)', 'Home::manageUser/$1'); //View Record By ID
+    $routes->post('users/add-user', 'UserController::addUser'); //Add User
+    $routes->post('users/update-user/(:num)', 'UserController::updateUser/$1'); //Add User
+
+
+
     $routes->get('logout', 'AuthController::logout'); //Logout
 });

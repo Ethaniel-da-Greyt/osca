@@ -1,3 +1,10 @@
+<?php
+$session = session();
+$user = $session->get('user');
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,7 +101,6 @@
 
 <body>
 
-    <!-- ✅ Sidebar -->
     <div class="sidebar d-flex flex-column justify-content-between">
         <div>
             <div class="text-center mb-3">
@@ -103,18 +109,38 @@
                 <h6 class="mt-2">Office of the Senior Citizens Affairs</h6>
             </div>
 
-            <a href="/osca" class="<?= $this->renderSection('dashboard') ?>">
-                <i class="fa fa-gauge"></i> Dashboard
-            </a>
-            <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>">
-                <i class="fa fa-users"></i> Senior Citizen Lists
-            </a>
-            <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>">
-                <i class="fa-solid fa-plus"></i> Add Records
-            </a>
-            <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
-                <i class="fa fa-gear"></i> Export/Print Records
-            </a>
+            <?php if ($session->get('isLoggedIn')) : ?>
+                <?php if ($user['role'] == 'user') : ?>
+                    <a href="/osca" class="<?= $this->renderSection('dashboard') ?>">
+                        <i class="fa fa-gauge"></i> Dashboard
+                    </a>
+                    <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>">
+                        <i class="fa fa-users"></i> Senior Citizen Lists
+                    </a>
+                    <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>">
+                        <i class="fa-solid fa-plus"></i> Add Records
+                    </a>
+                    <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
+                        <i class="fa fa-gear"></i> Export/Print Records
+                    </a>
+                <?php else: ?>
+                    <a href="/osca" class="<?= $this->renderSection('dashboard') ?>">
+                        <i class="fa fa-gauge"></i> Dashboard
+                    </a>
+                    <a href="/osca/sc-list" class="<?= $this->renderSection('sclist') ?>">
+                        <i class="fa fa-users"></i> Senior Citizen Lists
+                    </a>
+                    <a href="/osca/add-record" class="<?= $this->renderSection('addrecord') ?>">
+                        <i class="fa-solid fa-plus"></i> Add Records
+                    </a>
+                    <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
+                        <i class="fa fa-gear"></i> Export/Print Records
+                    </a>
+                    <a href="/osca/users" class="<?= $this->renderSection('addUsers') ?>">
+                        <i class="fa-solid fa-user-plus"></i> Add Users
+                    </a>
+                <?php endif ?>
+            <?php endif ?>
         </div>
 
         <div class="logout-section text-center mt-auto mb-3">
@@ -124,18 +150,16 @@
         </div>
     </div>
 
-    <!-- Content Wrapper -->
     <div class="content">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 p-3 rounded">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-3 p-3 rounded">
             <div class="container-fluid">
                 <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" id="sidebarToggle">
                     <i class="fa fa-bars"></i>
                 </button>
-                <span class="navbar-brand">OSCA Management System</span>
+                <span class="navbar-brand">OSCA Management System | <?= esc(ucfirst($user['role'])) ?></span>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <?= $this->renderSection('content') ?>
     </div>
 
@@ -162,12 +186,11 @@
     <?php endif ?>
 
     <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
-    <script>
-        // Optional: mobile sidebar toggle
+    <!-- <script>
         document.getElementById('sidebarToggle')?.addEventListener('click', () => {
             document.querySelector('.sidebar').classList.toggle('d-none');
         });
-    </script>
+    </script> -->
 
 </body>
 

@@ -34,8 +34,8 @@ class ExportController extends BaseController
             'Age',
             'OSCA ID No.',
             'Remarks',
-            'Date Issued',
-            'Date Applied'
+            'Date Applied',
+            'Date Issued'
         ];
 
         $col = 'A';
@@ -57,8 +57,8 @@ class ExportController extends BaseController
             $sheet->setCellValue('I' . $row, strtoupper($n['age']));
             $sheet->setCellValue('J' . $row, strtoupper($n['osca_id']));
             $sheet->setCellValue('K' . $row, strtoupper($n['remarks']));
-            $sheet->setCellValue('L' . $row, !empty($n['date_issued']) ? strtoupper(date('F d, Y', strtotime($n['date_issued']))) : 'N/A');
-            $sheet->setCellValue('M' . $row, !empty($n['date_applied']) ? strtoupper(date('F d, Y', strtotime($n['date_applied']))) : 'N/A');
+            $sheet->setCellValue('L' . $row, !empty($n['date_applied']) ? strtoupper(date('F d, Y', strtotime($n['date_applied']))) : 'N/A');
+            $sheet->setCellValue('M' . $row, !empty($n['date_issued']) ? strtoupper(date('F d, Y', strtotime($n['date_issued']))) : 'N/A');
             $row++;
         }
 
@@ -78,6 +78,11 @@ class ExportController extends BaseController
         ]);
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
+
+        // Autosize columns
+        foreach (range('A', 'M') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'OSCA_MASTERLIST_' . date('Y-m-d') . '.xlsx';
@@ -120,8 +125,8 @@ class ExportController extends BaseController
             'Age',
             'OSCA ID No.',
             'Remarks',
+            'Date Applied',
             'Date Issued',
-            'Date Applied'
         ];
 
         $col = 'A';
@@ -144,8 +149,8 @@ class ExportController extends BaseController
             $sheet->setCellValue('I' . $row, strtoupper($n['age']));
             $sheet->setCellValue('J' . $row, strtoupper($n['osca_id']));
             $sheet->setCellValue('K' . $row, strtoupper($n['remarks']));
-            $sheet->setCellValue('L' . $row, !empty($n['date_issued']) ? date('F d, Y', strtotime($n['date_issued'])) : 'N/A');
-            $sheet->setCellValue('M' . $row, !empty($n['date_applied']) ? date('F d, Y', strtotime($n['date_applied'])) : 'N/A');
+            $sheet->setCellValue('L' . $row, !empty($n['date_applied']) ? date('F d, Y', strtotime($n['date_applied'])) : 'N/A');
+            $sheet->setCellValue('M' . $row, !empty($n['date_issued']) ? date('F d, Y', strtotime($n['date_issued'])) : 'N/A');
             $row++;
         }
 
@@ -211,8 +216,8 @@ class ExportController extends BaseController
             'Age',
             'OSCA ID No.',
             'Remarks',
-            'Date Issued',
-            'Date Applied'
+            'Date Applied',
+            'Date Issued'
         ];
 
         $row = 3;
@@ -269,8 +274,8 @@ class ExportController extends BaseController
             $sheet->setCellValue('I' . $row, $n['age']);
             $sheet->setCellValue('J' . $row, strtoupper($n['osca_id']));
             $sheet->setCellValue('K' . $row, strtoupper($n['remarks']));
-            $sheet->setCellValue('L' . $row, !empty($n['date_issued']) ? date('F d, Y', strtotime($n['date_issued'])) : 'N/A');
-            $sheet->setCellValue('M' . $row, !empty($n['date_applied']) ? date('F d, Y', strtotime($n['date_applied'])) : 'N/A');
+            $sheet->setCellValue('L' . $row, !empty($n['date_applied']) ? date('F d, Y', strtotime($n['date_applied'])) : 'N/A');
+            $sheet->setCellValue('M' . $row, !empty($n['date_issued']) ? date('F d, Y', strtotime($n['date_issued'])) : 'N/A');
             $row++;
         }
 

@@ -8,10 +8,10 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class ScController extends BaseController
 {
-    public function test1()
-    {
-        return view('test');
-    }
+    // public function test1()
+    // {
+    //     return view('test');
+    // }
 
     public function addRecord()
     {

@@ -35,7 +35,7 @@ class AuthController extends BaseController
 
             $model = new UsersModel();
 
-            $check = $model->where('username', $data['username'])->first();
+            $check = $model->where('username', $data['username'])->where('isDelete', 0)->first();
 
             if ($check) {
                 $passwordConfirm = password_verify($data['password'], $check['password']);
@@ -56,53 +56,6 @@ class AuthController extends BaseController
         }
     }
 
-
-    public function register()
-    {
-        try {
-            $validation = Services::validation();
-
-            $rules = [
-                'firstname' => 'required|max_length[50]',
-                'lastname' => 'required|max_length[50]',
-                'username' => 'required|max_length[30]',
-                'password' => 'required|max_length[50]|min_length[5]',
-            ];
-
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('error', $validation->getErrors());
-            }
-
-            $pass = $this->request->getPost('password');
-            $Conpass = $this->request->getPost('confirm_pass');
-            $checkPass = $pass == $Conpass;
-
-            if (!$checkPass) {
-                return redirect()->back()->withInput()->with('error', "Password doesn't matched.");
-            }
-
-            $data = [
-                'firstname' => $this->request->getPost('firstname'),
-                'lastname' => $this->request->getPost('lastname'),
-                'username' => $this->request->getPost('username'),
-                'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            ];
-
-            $model = new UsersModel();
-
-            $findUser = $model->where('username', $data['username'])->where('isDelete', 0)->first();
-
-            if ($findUser) {
-                return redirect()->back()->with('taken', 'Username already registered');
-            }
-
-            $model->insert($data);
-
-            return redirect()->back()->with('success', 'You Registered Successfully');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
 
     public function logout()
     {

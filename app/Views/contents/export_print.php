@@ -16,34 +16,34 @@
             <div class="row g-3 justify-content-center">
                 <div class="col-md-6 col-lg-5">
                     <a href="/osca/export-record/all" class="btn btn-success w-100 py-4 shadow-sm fw-semibold">
-                        <i class="fas fa-file-excel me-2"></i> Export All in Excel
+                        <i class="fa-regular fa-file-excel"></i> Export All in Excel
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-5">
                     <a href="/osca/export-record/pdf/all" class="btn btn-primary w-100 py-4 shadow-sm fw-semibold">
-                        <i class="fas fa-file-pdf me-2"></i> Export All in PDF
+                        <i class="fa-regular fa-file-pdf"></i> Export All in PDF
                     </a>
                 </div>
 
                 <div class="col-md-6 col-lg-5">
                     <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white" data-bs-target="#barangay" data-bs-toggle="modal">
-                        <i class="fas fa-check-square me-2"></i> Export by Barangay in Excel
+                        <i class="fa-regular fa-file-excel"></i> Export by Barangay in Excel
                     </button>
                 </div>
                 <div class="col-md-6 col-lg-5">
                     <button class="btn btn-primary w-100 py-4 shadow-sm fw-semibold" data-bs-target="#pdf_barangay" data-bs-toggle="modal">
-                        <i class="fas fa-file-export me-2"></i> Export by Barangay in PDF
+                        <i class="fa-regular fa-file-pdf"></i> Export by Barangay in PDF
                     </button>
                 </div>
 
                 <div class="col-md-6 col-lg-5">
                     <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white" data-bs-target="#unit" data-bs-toggle="modal">
-                        <i class="fas fa-print me-2"></i> Export by Unit in Excel
+                        <i class="fa-regular fa-file-excel"></i> Export by Unit in Excel
                     </button>
                 </div>
                 <div class="col-md-6 col-lg-5">
                     <button data-bs-toggle="modal" data-bs-target="#pdf_unit" class="btn btn-primary w-100 py-4 shadow-sm fw-semibold">
-                        <i class="fas fa-download me-2"></i> Export by Unit in PDF
+                        <i class="fa-regular fa-file-pdf"></i> Export by Unit in PDF
                     </button>
                 </div>
             </div>

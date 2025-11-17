@@ -55,7 +55,7 @@
                         <div class="col-3">Name</div>
                         <div class="col-2">Role</div>
                         <div class="col-2 text-center">Status</div>
-                        <div class="col-2 text-end">Action</div>
+                        <div class="col-2 text-end"></div>
                     </div>
 
                     <?php foreach ($users as $u): ?>

@@ -17,7 +17,7 @@ class SeniorCitizenSeeder extends Seeder
 
         $data = [];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $birthdate = $faker->dateTimeBetween('-100 years', '-60 years')->format('Y-m-d');
             $age = date('Y') - date('Y', strtotime($birthdate));
 

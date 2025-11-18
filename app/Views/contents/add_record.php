@@ -13,7 +13,7 @@
     <hr>
 
     <div class="">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             <div class="row mb-3">
                 <div class="col-6">
                     <label for="" class="form-label fw-semibold">Last Name</label>
@@ -102,6 +102,10 @@
                     <label for="" class="form-label fw-semibold">Date Issued</label>
                     <input type="date" name="date_issued" class="form-control">
                 </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Upload Photo</label>
+                <input type="file" name="photo" class="form-control" id="photo" required>
             </div>
             <div class="mb-3">
                 <label for="" class="form-label fw-semibold">Remarks</label>

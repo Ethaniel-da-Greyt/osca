@@ -115,7 +115,6 @@ class Home extends BaseController
             $barangaylist = $barangay->findAll();
 
             $list = $records->where('isDelete', 0)->where('id', $id)->first();
-
             return view('contents/manage_record', [
                 'n' => $list,
                 'barangay' => $barangaylist,

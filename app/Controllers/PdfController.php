@@ -4,32 +4,47 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 class PdfController extends BaseController
 {
-    public function generate()
-    {
-        $name = 'JOSE MARI CHAN';
-        $address = 'BRGY. SICAYAB BUCANA, DAPITAN CITY, ZAMBOANGA DEL NORTE';
-        $dob = '01/01/1960';
-        $sex = 'MALE';
-        $id_no = 0012345;
-        $issued = '09/26/2025';
-        $profile = WRITEPATH . 'uploads/photo.jpg';
-        $qrcode = WRITEPATH . 'uploads/qr-code.png';
-        $signature = 'sample';
+    public function generate(
+        $name,
+        $address,
+        $dob,
+        $sex,
+        $id_no,
+        $issued,
+        $profile,
+        $qrcode,
+        $signature = '',
+    ) {
+        // $name = 'JOSE MARI CHAN';
+        // $address = 'BRGY. SICAYAB BUCANA, DAPITAN CITY, ZAMBOANGA DEL NORTE';
+        // $dob = '01/01/1960';
+        // $sex = 'MALE';
+        // $id_no = 0012345;
+        // $issued = '09/26/2025';
+        // $profile = WRITEPATH . 'uploads/photo.jpg';
+        // $qrcode = WRITEPATH . 'uploads/qr-code.png';
+        // $signature = 'sample';
         // EXAMPLE DATA — replace with DB or form data
+        $gender = '';
+        switch ($sex) {
+            case 'M':
+                $gender = 'MALE';
+            case 'F':
+                $gender = 'FEMALE';
+        }
+
         $data = [
             'name'       => $name, //JOSE MARI CHAN
-            'address'    => $address, // BRGY. DAWO, DAPITAN CITY, ZAMBOANGA DEL NORTE
+            'address'    => strtoupper($address), // BRGY. DAWO, DAPITAN CITY, ZAMBOANGA DEL NORTE
             'dob'        => $dob, //01/01/1960
-            'sex'        => $sex, //MALE
+            'sex'        => $gender, //MALE
             'id_number'  => $id_no, //0012345
             'issued'     => $issued, //09/26/2025
-            'photo'      => $profile, //IMAGE PROFILE PATH
-            'qrcode'     => $qrcode, //GENERATED QR-CODE
+            'photo'      => WRITEPATH . $profile, //IMAGE PROFILE PATH
+            'qrcode'     => WRITEPATH . 'uploads/qrcodes/' . $qrcode, //GENERATED QR-CODE
             'signature'  => $signature, //SIGNATURE IMAGE PATH
         ];
 
@@ -79,12 +94,14 @@ class PdfController extends BaseController
         }
 
         $output = $outputDir . "osca_id_" . $id_no . ".png";
+
+        // Save the image
         imagepng($template, $output, 9);
 
         // Free memory
         imagedestroy($template);
 
-        return $this->response->download($outputDir, null)
-            ->setFileName("OSCA_ID.png");
+        // Download the file
+        return true;
     }
 }

@@ -24,6 +24,8 @@ class MasterListModel extends Model
         'age',
         'osca_id',
         'remarks',
+        'photo',
+        'qrcode',
         'date_issued',
         'date_applied',
         'isDelete',

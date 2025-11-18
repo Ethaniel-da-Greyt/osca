@@ -15,6 +15,8 @@
  */
 defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
 
+defined('SALT') || define('SALT', 'mySaltsecretKey#!2@');
+
 /*
  | --------------------------------------------------------------------------
  | Composer Path

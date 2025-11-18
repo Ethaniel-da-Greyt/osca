@@ -5,10 +5,21 @@
 
 <?= $this->section('content') ?>
 
+
 <div class="container-fluid">
     <div class="card mt-4 shadow-sm border-0 mb-5">
         <div class="card-header bg-dark text-white fw-bold fs-5"><?= esc($n['firstname'] . " " . $n['lastname']) ?>'s Profile</div>
         <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-3">
+                    <?php
+                    $imgPath = WRITEPATH . $n['photo'];
+                    $photoImg = base64_encode(file_get_contents($imgPath));
+                    $photo = 'data:image/png;base64,' . $photoImg;
+                    ?>
+                    <img class="img-thumbnail" src="<?= $n['photo'] == null ? '' : $photo ?>" alt="Avatar" width="250">
+                </div>
+            </div>
             <form action="/osca/manage-record" method="POST">
                 <input type="hidden" name="id" value="<?= esc($n['id']) ?>">
                 <div class="row mb-3">

@@ -9,8 +9,17 @@ use Dompdf\Options;
 
 class PdfController extends BaseController
 {
-    public function generate($name, $address, $dob, $sex, $id_no, $issued, $profile, $qrcode, $signature)
+    public function generate()
     {
+        $name = 'JOSE MARI CHAN';
+        $address = 'BRGY. SICAYAB BUCANA, DAPITAN CITY, ZAMBOANGA DEL NORTE';
+        $dob = '01/01/1960';
+        $sex = 'MALE';
+        $id_no = 0012345;
+        $issued = '09/26/2025';
+        $profile = WRITEPATH . 'uploads/photo.jpg';
+        $qrcode = WRITEPATH . 'uploads/qr-code.png';
+        $signature = 'sample';
         // EXAMPLE DATA — replace with DB or form data
         $data = [
             'name'       => $name, //JOSE MARI CHAN
@@ -35,7 +44,7 @@ class PdfController extends BaseController
 
         // Write text on template (x,y positions placed according to your layout)
         imagettftext($template, 20, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 20, 0, 375, 290, $black, $font, $data['address']);
+        imagettftext($template, 13, 0, 375, 290, $black, $font, $data['address']);
         imagettftext($template, 20, 0, 375, 360, $black, $font, $data['dob']);
         imagettftext($template, 20, 0, 375, 425, $black, $font, $data['sex']);
         imagettftext($template, 20, 0, 375, 485, $black, $font, $data['id_number']);
@@ -62,7 +71,7 @@ class PdfController extends BaseController
         // Save final output
         // $output = WRITEPATH . "generated/osca_id_" . time() . ".png";
         // imagepng($template, $output, 9);
-        $outputDir = WRITEPATH . "generated/";
+        $outputDir = WRITEPATH . "Osca-ID/";
 
         // Create folder if it doesn't exist
         if (!is_dir($outputDir)) {

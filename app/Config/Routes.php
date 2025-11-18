@@ -12,7 +12,7 @@ $routes->post('/login', 'AuthController::login');
 $routes->get('/osca-register', 'Home::register');
 $routes->post('/osca-register', 'AuthController::register');
 
-$routes->get('/sample', 'PdfController::generate');
+$routes->get('/sample', 'PdfController::generate'); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG
 
 $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 

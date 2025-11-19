@@ -13,6 +13,7 @@ $routes->get('/osca-register', 'Home::register');
 $routes->post('/osca-register', 'AuthController::register');
 
 $routes->get('/sample', 'PdfController::generate'); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG
+
 $routes->get('/id-sample', function () {
     return view('Osca-ID-front');
 }); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD

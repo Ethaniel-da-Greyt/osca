@@ -49,7 +49,7 @@ class PdfController extends BaseController
         ];
 
         // Load ID template
-        $template = imagecreatefrompng(WRITEPATH . 'uploads/template/osca-template-id-orig.png');
+        $template = imagecreatefrompng(FCPATH . 'template/osca-adjusted.png');
 
         // Text color
         $black = imagecolorallocate($template, 0, 0, 0);
@@ -58,12 +58,12 @@ class PdfController extends BaseController
         $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
 
         // Write text on template (x,y positions placed according to your layout)
-        imagettftext($template, 22, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 15, 0, 375, 290, $black, $font, $data['address']);
-        imagettftext($template, 15, 0, 375, 310, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
-        imagettftext($template, 20, 0, 375, 360, $black, $font, $data['dob']);
-        imagettftext($template, 20, 0, 375, 425, $black, $font, $data['sex']);
-        imagettftext($template, 20, 0, 375, 485, $black, $font, $data['id_number']);
+        imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
+        imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
+        imagettftext($template, 18, 0, 375, 333, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
+        imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
+        imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);
+        imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
         // imagettftext($template, 20, 0, 375, 550, $black, $font, $data['issued']);
 
         // Add Photo (left side)

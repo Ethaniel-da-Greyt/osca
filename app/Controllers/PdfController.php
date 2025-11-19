@@ -58,9 +58,9 @@ class PdfController extends BaseController
         $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
 
         // Write text on template (x,y positions placed according to your layout)
-        imagettftext($template, 20, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 13, 0, 375, 290, $black, $font, $data['address']);
-        imagettftext($template, 13, 0, 375, 310, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
+        imagettftext($template, 22, 0, 375, 230, $black, $font, $data['name']);
+        imagettftext($template, 15, 0, 375, 290, $black, $font, $data['address']);
+        imagettftext($template, 15, 0, 375, 310, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
         imagettftext($template, 20, 0, 375, 360, $black, $font, $data['dob']);
         imagettftext($template, 20, 0, 375, 425, $black, $font, $data['sex']);
         imagettftext($template, 20, 0, 375, 485, $black, $font, $data['id_number']);

@@ -40,6 +40,16 @@
 
             </div>
 
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Select Batch to Print</h4>
+                </div>
+
+                <div class="card-body">
+                    <a class="btn btn-primary form-control" href="osca/print-back">Print Back</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

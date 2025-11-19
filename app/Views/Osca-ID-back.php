@@ -40,19 +40,14 @@
 	<?php
 	// Example: load all generated IDs from folder
 	$idFolder = WRITEPATH . 'Osca-ID/';
-	$idFiles = glob($idFolder . '*.png'); // all PNGs in folder
 
-	foreach ($idFiles as $file) {
-		// Convert image to base64 for inline display
-		// $imgBase64 = base64_encode(file_get_contents($file));
-		$imgSrc = base_url('template/osca-back.png');
+	// Convert image to base64 for inline display
+	// $imgBase64 = base64_encode(file_get_contents($file));
+	$imgSrc = base_url('template/osca-back.png');
 	?>
-		<div class="id-card">
-			<img src="<?= $imgSrc ?>" class="full-id">
-		</div>
-	<?php
-	}
-	?>
+	<div class="id-card">
+		<img src="<?= $imgSrc ?>" class="full-id">
+	</div>
 
 </body>
 

@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
 
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mb-5">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">Select Batch to Print</h4>
                 </div>
@@ -41,12 +41,12 @@
             </div>
 
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Select Batch to Print</h4>
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Print Back</h4>
                 </div>
 
                 <div class="card-body">
-                    <a class="btn btn-primary form-control" href="osca/print-back">Print Back</a>
+                    <a class="btn btn-success form-control" href="osca/print-back">Print Back</a>
                 </div>
             </div>
 

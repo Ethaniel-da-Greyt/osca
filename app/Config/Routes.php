@@ -48,6 +48,9 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     //Select Batch for ID Printing
     $routes->get('select-batch', 'Home::listBatches');
     $routes->get('print-batch', 'Home::printBatch');
+    $routes->get('osca/print-back', function (){
+        return view('Osca-ID-back.php');
+    });
 
     //admin
     $routes->get('users', 'Home::users'); //View Users

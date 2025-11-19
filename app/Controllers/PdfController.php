@@ -67,9 +67,31 @@ class PdfController extends BaseController
         // imagettftext($template, 20, 0, 375, 550, $black, $font, $data['issued']);
 
         // Add Photo (left side)
-        if (file_exists($data['photo'])) {
-            $photo = imagecreatefromjpeg($data['photo']);
+        // if (file_exists($data['photo'])) {
+        //     $photo = imagecreatefromjpeg($data['photo']);
+        //     imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
+        // }
+
+        $createImageFromFile = function ($file) {
+            if (!file_exists($file)) return false;
+            $info = getimagesize($file);
+            if (!$info) return false;
+            switch ($info['mime']) {
+                case 'image/jpeg':
+                    return imagecreatefromjpeg($file);
+                case 'image/png':
+                    return imagecreatefrompng($file);
+                case 'image/gif':
+                    return imagecreatefromgif($file);
+                default:
+                    return false;
+            }
+        };
+
+        // Add photo
+        if ($photo = $createImageFromFile($data['photo'])) {
             imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
+            imagedestroy($photo);
         }
 
         // Signature

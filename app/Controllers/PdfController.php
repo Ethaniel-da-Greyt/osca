@@ -13,7 +13,6 @@ class PdfController extends BaseController
         $dob,
         $sex,
         $id_no,
-        $issued,
         $profile,
         $qrcode,
         $signature = '',
@@ -32,8 +31,10 @@ class PdfController extends BaseController
         switch ($sex) {
             case 'M':
                 $gender = 'MALE';
+                break;
             case 'F':
                 $gender = 'FEMALE';
+                break;
         }
 
         $data = [
@@ -42,14 +43,13 @@ class PdfController extends BaseController
             'dob'        => $dob, //01/01/1960
             'sex'        => $gender, //MALE
             'id_number'  => $id_no, //0012345
-            'issued'     => $issued, //09/26/2025
             'photo'      => WRITEPATH . $profile, //IMAGE PROFILE PATH
             'qrcode'     => WRITEPATH . 'uploads/qrcodes/' . $qrcode, //GENERATED QR-CODE
             'signature'  => $signature, //SIGNATURE IMAGE PATH
         ];
 
         // Load ID template
-        $template = imagecreatefrompng(WRITEPATH . 'uploads/template/osca-template-orig.png');
+        $template = imagecreatefrompng(WRITEPATH . 'uploads/template/osca-template-id-orig.png');
 
         // Text color
         $black = imagecolorallocate($template, 0, 0, 0);
@@ -60,10 +60,11 @@ class PdfController extends BaseController
         // Write text on template (x,y positions placed according to your layout)
         imagettftext($template, 20, 0, 375, 230, $black, $font, $data['name']);
         imagettftext($template, 13, 0, 375, 290, $black, $font, $data['address']);
+        imagettftext($template, 13, 0, 375, 310, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
         imagettftext($template, 20, 0, 375, 360, $black, $font, $data['dob']);
         imagettftext($template, 20, 0, 375, 425, $black, $font, $data['sex']);
         imagettftext($template, 20, 0, 375, 485, $black, $font, $data['id_number']);
-        imagettftext($template, 20, 0, 375, 550, $black, $font, $data['issued']);
+        // imagettftext($template, 20, 0, 375, 550, $black, $font, $data['issued']);
 
         // Add Photo (left side)
         if (file_exists($data['photo'])) {
@@ -86,13 +87,11 @@ class PdfController extends BaseController
         // Save final output
         // $output = WRITEPATH . "generated/osca_id_" . time() . ".png";
         // imagepng($template, $output, 9);
-        $outputDir = WRITEPATH . "Osca-ID/";
 
-        // Create folder if it doesn't exist
-        if (!is_dir($outputDir)) {
-            mkdir($outputDir, 0755, true);
-        }
+        //
+        $outputDir = $this->getBatchFolder();
 
+        // final output path
         $output = $outputDir . "osca_id_" . $id_no . ".png";
 
         // Save the image
@@ -103,5 +102,49 @@ class PdfController extends BaseController
 
         // Download the file
         return true;
+    }
+
+
+
+
+    private function getBatchFolder()
+    {
+        $basePath = WRITEPATH . 'Osca-ID/';
+        $maxFiles = 20;
+
+        // Ensure base folder exists
+        if (!is_dir($basePath)) {
+            mkdir($basePath, 0777, true);
+        }
+
+        $batchNumber = 1;
+
+        // Find the highest existing batch folder
+        while (is_dir($basePath . 'batch-' . $batchNumber)) {
+            $batchNumber++;
+        }
+
+        $lastBatch = $batchNumber - 1;
+        $lastBatchPath = $basePath . 'batch-' . $lastBatch;
+
+        // If no batch exists yet, create batch-1
+        if ($lastBatch == 0) {
+            mkdir($basePath . 'batch-1', 0777, true);
+            return $basePath . 'batch-1/';
+        }
+
+        // Count files inside the last batch folder
+        $files = glob($lastBatchPath . '/*');
+        $fileCount = $files ? count($files) : 0;
+
+        // If full, create next batch
+        if ($fileCount >= $maxFiles) {
+            $newBatchPath = $basePath . 'batch-' . $batchNumber;
+            mkdir($newBatchPath, 0777, true);
+            return $newBatchPath . '/';
+        }
+
+        // Otherwise, return the existing not-full batch folder
+        return $lastBatchPath . '/';
     }
 }

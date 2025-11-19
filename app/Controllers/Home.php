@@ -213,4 +213,30 @@ class Home extends BaseController
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function listBatches()
+    {
+        $basePath = WRITEPATH . 'Osca-ID/';
+        $batches = [];
+
+        foreach (glob($basePath . 'batch-*', GLOB_ONLYDIR) as $folder) {
+            $batches[] = basename($folder);
+        }
+
+        return view('printing-id/select-batch', ['batches' => $batches]);
+    }
+
+    public function printBatch()
+    {
+        // Receive batch via GET
+        $batch = $this->request->getGet('batch');
+
+        if (!$batch) {
+            return "No batch selected.";
+        }
+
+        return view('printing-id/print-batch', [
+            'batch' => $batch
+        ]);
+    }
 }

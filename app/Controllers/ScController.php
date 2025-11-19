@@ -43,25 +43,27 @@ class ScController extends BaseController
                 'osca_id'      => $this->request->getPost('osca_id'),
                 'date_issued'  => $this->request->getPost('date_issued') ?: null,
                 'date_applied' => $this->request->getPost('date_applied') ?: null,
-                'photo' => $photo,
-                'qrcode' => $qrcodeHash,
+                'photo'        => $photo,
+                'qrcode'       => $qrcodeHash,
                 'remarks'      => $this->request->getPost('remarks'),
             ];
 
             if ($model->insert($data)) {
+
                 $idGenerator = new PdfController();
                 $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'];
+
                 $idGenerator->generate(
                     $name,
-                    'Brgy. ' . $data['barangay'] . ', Dapitan City, Zamboanga del Norte',
+                    'Brgy. ' . $data['barangay'],
                     $data['birthdate'],
                     $data['sex'],
                     $data['osca_id'],
-                    $data['date_issued'],
                     $photo,
                     $qrcode,
                     $signature = ''
                 );
+                return redirect()->back()->with('success', 'Record added successfully!');
             }
 
             return redirect()->back()->with('success', 'Record added successfully!');

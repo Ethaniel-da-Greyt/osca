@@ -45,6 +45,10 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     $routes->post('export-record/pdf/barangay', 'ExportController::exportPdfByBarangay'); //Export PDF by Barangay
 
 
+    //Select Batch for ID Printing
+    $routes->get('select-batch', 'Home::listBatches');
+    $routes->get('print-batch', 'Home::printBatch');
+
     //admin
     $routes->get('users', 'Home::users'); //View Users
     $routes->get('manage-user/(:num)', 'Home::manageUser/$1'); //View Record By ID

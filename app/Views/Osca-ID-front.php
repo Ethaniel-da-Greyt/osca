@@ -38,12 +38,15 @@
 <body onload="window.print()">
 
 	<?php
-	// Example: load all generated IDs from folder
-	$idFolder = WRITEPATH . 'Osca-ID/';
-	$idFiles = glob($idFolder . '*.png'); // all PNGs in folder
+	// Load only the selected batch
+	$batchPath = WRITEPATH . 'Osca-ID/' . $batch . '/';
+
+	// All PNG files inside that batch
+	$idFiles = glob($batchPath . '*.png');
 
 	foreach ($idFiles as $file) {
-		// Convert image to base64 for inline display
+
+		// Convert to base64 for inline display
 		$imgBase64 = base64_encode(file_get_contents($file));
 		$imgSrc = 'data:image/png;base64,' . $imgBase64;
 	?>
@@ -53,6 +56,7 @@
 	<?php
 	}
 	?>
+
 
 </body>
 

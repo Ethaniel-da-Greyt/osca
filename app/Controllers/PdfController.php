@@ -37,7 +37,7 @@ class PdfController extends BaseController
             
             $model->update($rec['osca_id'], ['qrcode' => $qrcode]);
             $this->generate(
-                $rec['firstname'] . ' ' . $rec['middle_name'] . ' ' . $rec['lastname'],
+                $rec['firstname'] . ' ' . $rec['middle_name'] . ' ' . $rec['lastname'] . '' . ' ' . $rec['suffix'],
                 'BRGY. ' . strtoupper($rec['barangay']),
                 $rec['birthdate'],
                 $rec['sex'],

@@ -51,7 +51,7 @@ class ScController extends BaseController
             if ($model->insert($data)) {
 
                 $idGenerator = new PdfController();
-                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'];
+                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'].  ' ' . $data['suffix'];
 
                 $idGenerator->generate(
                     $name,
@@ -102,7 +102,7 @@ class ScController extends BaseController
             if ($model->update($id, $data)) {
                 $sc = $model->where('id', $id)->first();
                 $idGenerator = new PdfController();
-                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'];
+                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'] . ' ' . $data['suffix'];
 
                 $idGenerator->generate(
                     $name,

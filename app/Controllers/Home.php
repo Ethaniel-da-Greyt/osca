@@ -21,7 +21,7 @@ class Home extends BaseController
 
         try {
             $record = new MasterListModel();
-            $perPage = 15;
+            $perPage = 20;
 
             // Define start and end of month
             $startOfMonth = date('Y-m-01');

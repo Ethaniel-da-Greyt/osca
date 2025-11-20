@@ -62,3 +62,6 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('logout', 'AuthController::logout'); //Logout
 });
+
+
+// $routes->get('generate', 'PdfController::makeNewRecord'); //manifestinggggggggggggg

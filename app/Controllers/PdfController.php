@@ -4,9 +4,53 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\MasterListModel;
+
 
 class PdfController extends BaseController
 {
+    public function makeNewRecord()
+    {
+        $batchPath = WRITEPATH . 'Osca-ID/batch-4/';
+
+        $files = glob($batchPath . '*.png');
+
+        $ids = [];
+
+        foreach ($files as $file) {
+            $filename = basename($file);
+
+            if (preg_match('/osca_id_(\d+)\.png$/', $filename, $match)) {
+                $ids[] = $match[1];
+            }
+        }
+
+
+
+        $model = new MasterListModel();
+
+        $records = $model->whereIn('osca_id', $ids)->findAll();
+
+        foreach ($records as $rec) {
+            $Qr = new QrCodeGenerator();
+            $qrcode = $Qr->generateQr(md5(SALT . $rec['osca_id']));
+            
+            $model->update($rec['osca_id'], ['qrcode' => $qrcode]);
+            $this->generate(
+                $rec['firstname'] . ' ' . $rec['middle_name'] . ' ' . $rec['lastname'],
+                'BRGY. ' . strtoupper($rec['barangay']),
+                $rec['birthdate'],
+                $rec['sex'],
+                $rec['osca_id'],   // ID NO
+                $rec['photo'],    // profile image
+                $qrcode,    // QR
+                ''
+            );
+        }
+        return $this->response->setJSON(['message' => 'Done']);
+    }
+
+
     public function generate(
         $name,
         $address,
@@ -49,7 +93,16 @@ class PdfController extends BaseController
         ];
 
         // Load ID template
-        $template = imagecreatefrompng(FCPATH . 'template/osca-adjusted.png');
+        // $template = imagecreatefrompng(FCPATH . 'template/osca-adjusted-new.png');
+        set_error_handler(function () {
+        // do nothing (ignore warnings)
+        }, E_WARNING);
+
+        $Imgdata = file_get_contents(FCPATH . 'template/osca-adjusted-new.png');
+        $template = imagecreatefromstring($Imgdata);
+
+        // Restore normal error handling
+        restore_error_handler();
 
         // Text color
         $black = imagecolorallocate($template, 0, 0, 0);

@@ -43,7 +43,7 @@
 
 	// Convert image to base64 for inline display
 	// $imgBase64 = base64_encode(file_get_contents($file));
-	$imgSrc = base_url('template/osca-back.png');
+	$imgSrc = base_url('template/osca-back-new.png');
 	?>
 	<div class="id-card">
 		<img src="<?= $imgSrc ?>" class="full-id">

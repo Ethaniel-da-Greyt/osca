@@ -98,7 +98,24 @@ class ScController extends BaseController
                 'remarks'      => $this->request->getPost('remarks'),
             ];
 
-            $model->update($id, $data);
+
+            if ($model->update($id, $data)) {
+                $sc = $model->where('id', $id)->first();
+                $idGenerator = new PdfController();
+                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'];
+
+                $idGenerator->generate(
+                    $name,
+                    'Brgy. ' . $data['barangay'],
+                    $data['birthdate'],
+                    $data['sex'],
+                    $data['osca_id'],
+                    $sc['photo'],
+                    $sc['qrcode'],
+                    $signature = ''
+                );
+                return redirect()->back()->with('success', 'Record updated successfully!');
+            }
 
             return redirect()->back()->with('success', 'Record updated successfully!');
         } catch (\Exception $e) {

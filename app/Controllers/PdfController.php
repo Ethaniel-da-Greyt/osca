@@ -112,7 +112,7 @@ class PdfController extends BaseController
 
         // Write text on template (x,y positions placed according to your layout)
         imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
+        imagettftext($template, 18, 0, 375, 310, $black, $font, strtoupper($data['address']));
         imagettftext($template, 18, 0, 375, 333, $black, $font, 'DAPITAN CITY, ZAMBOANGA DEL NORTE');
         imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
         imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);

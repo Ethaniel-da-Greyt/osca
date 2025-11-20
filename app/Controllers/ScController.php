@@ -31,27 +31,27 @@ class ScController extends BaseController
             $qrcode = $Qr->generateQr($qrcodeHash);
 
             $data = [
-                'lastname'     => $this->request->getPost('lastname'),
-                'firstname'    => $this->request->getPost('firstname'),
-                'middle_name'  => $this->request->getPost('middle_name'),
-                'suffix'       => $this->request->getPost('suffix'),
-                'sex'          => $this->request->getPost('sex'),
-                'barangay'     => $this->request->getPost('barangay'),
-                'unit'         => $this->request->getPost('unit'),
-                'birthdate'    => $birthdate,
-                'age'          => $age, // auto computed
-                'osca_id'      => $this->request->getPost('osca_id'),
-                'date_issued'  => $this->request->getPost('date_issued') ?: null,
+                'lastname' => $this->request->getPost('lastname'),
+                'firstname' => $this->request->getPost('firstname'),
+                'middle_name' => $this->request->getPost('middle_name'),
+                'suffix' => $this->request->getPost('suffix'),
+                'sex' => $this->request->getPost('sex'),
+                'barangay' => $this->request->getPost('barangay'),
+                'unit' => $this->request->getPost('unit'),
+                'birthdate' => $birthdate,
+                'age' => $age, // auto computed
+                'osca_id' => $this->request->getPost('osca_id'),
+                'date_issued' => $this->request->getPost('date_issued') ?: null,
                 'date_applied' => $this->request->getPost('date_applied') ?: null,
-                'photo'        => $photo,
-                'qrcode'       => $qrcodeHash,
-                'remarks'      => $this->request->getPost('remarks'),
+                'photo' => $photo,
+                'qrcode' => $qrcodeHash,
+                'remarks' => $this->request->getPost('remarks'),
             ];
 
             if ($model->insert($data)) {
 
                 $idGenerator = new PdfController();
-                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'].  ' ' . $data['suffix'];
+                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'] . ' ' . $data['suffix'];
 
                 $idGenerator->generate(
                     $name,
@@ -75,53 +75,67 @@ class ScController extends BaseController
     public function update()
     {
         try {
+            
             $model = new MasterListModel();
-
             $id = $this->request->getPost('id');
 
             $birthdate = $this->request->getPost('birthdate');
             $age = $this->calculateAge($birthdate);
 
+            // Generate QR code
+            $Qr = new QrCodeGenerator();
+            $qrcodeHash = md5(SALT . $this->request->getPost('osca_id'));
+            $qrcodeFilename = $Qr->generateQr($qrcodeHash);  // Assumes this returns the filename (e.g., 'qrcode_123.png')
+
             $data = [
-                'lastname'     => $this->request->getPost('lastname'),
-                'firstname'    => $this->request->getPost('firstname'),
-                'middle_name'  => $this->request->getPost('middle_name'),
-                'suffix'       => $this->request->getPost('suffix'),
-                'sex'          => $this->request->getPost('sex'),
-                'barangay'     => $this->request->getPost('barangay'),
-                'unit'         => $this->request->getPost('unit'),
-                'birthdate'    => $birthdate,
-                'age'          => $age,
-                'osca_id'      => $this->request->getPost('osca_id'),
-                'date_issued'  => $this->request->getPost('date_issued') ?: null,
+                'lastname' => $this->request->getPost('lastname'),
+                'firstname' => $this->request->getPost('firstname'),
+                'middle_name' => $this->request->getPost('middle_name'),
+                'suffix' => $this->request->getPost('suffix'),
+                'sex' => $this->request->getPost('sex'),
+                'barangay' => $this->request->getPost('barangay'),
+                'unit' => $this->request->getPost('unit'),
+                'birthdate' => $birthdate,
+                'age' => $age,
+                'osca_id' => $this->request->getPost('osca_id'),
+                'date_issued' => $this->request->getPost('date_issued') ?: null,
                 'date_applied' => $this->request->getPost('date_applied') ?: null,
-                'remarks'      => $this->request->getPost('remarks'),
+                'remarks' => $this->request->getPost('remarks'),
             ];
 
-
-            if ($model->update($id, $data)) {
+            // Perform update
+            $updateResult = $model->update($id, $data);  // Update by primary key 'id'
+            if ($updateResult > 0) {
+                // Fetch updated record safely
                 $sc = $model->where('id', $id)->first();
-                $idGenerator = new PdfController();
-                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'] . ' ' . $data['suffix'];
+                if (!$sc || !isset($sc['photo'])) {
+                    return redirect()->back()->with('error', 'Failed to retrieve updated record or photo.');
+                }
 
-                $idGenerator->generate(
+                // Regenerate PDF ID using the library
+                $name = $data['firstname'] . ' ' . $data['middle_name'] . ' ' . $data['lastname'] . ' ' . $data['suffix'];
+                $generator = new PdfController();
+                $generator->generate(
                     $name,
-                    'Brgy. ' . $data['barangay'],
+                    'Brgy. ' . strtoupper($data['barangay']),  // Match makeNewRecord() format
                     $data['birthdate'],
                     $data['sex'],
                     $data['osca_id'],
-                    $sc['photo'],
-                    $sc['qrcode'],
+                    $sc['photo'],  // Assumes relative path (e.g., 'uploads/photo.jpg')
+                    $qrcodeFilename,  // Pass the QR filename
                     $signature = ''
                 );
-                return redirect()->back()->with('success', 'Record updated successfully!');
-            }
 
-            return redirect()->back()->with('success', 'Record updated successfully!');
+                return redirect()->back()->with('success', 'Record updated successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to update record. No changes made.');
+            }
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            // Log for debugging: log_message('error', $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
 
     // Helper function to compute age
     private function calculateAge($birthdate)

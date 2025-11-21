@@ -12,15 +12,15 @@ $routes->post('/login', 'AuthController::login');
 $routes->get('/osca-register', 'Home::register');
 $routes->post('/osca-register', 'AuthController::register');
 
-$routes->get('/sample', 'PdfController::generate'); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG
+// $routes->get('/sample', 'PdfController::generate'); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG
 
-$routes->get('/id-sample', function () {
-    return view('Osca-ID-front');
-}); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD
+// $routes->get('/id-sample', function () {
+//     return view('Osca-ID-front');
+// }); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD
 
-$routes->get('/id-sample-back', function () {
-    return view('Osca-ID-back');
-}); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD
+// $routes->get('/id-sample-back', function () {
+//     return view('Osca-ID-back');
+// }); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD
 
 $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 
@@ -48,9 +48,12 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     //Select Batch for ID Printing
     $routes->get('select-batch', 'Home::listBatches');
     $routes->get('print-batch', 'Home::printBatch');
-    $routes->get('osca/print-back', function (){
+    $routes->get('osca/print-back', function () {
         return view('Osca-ID-back.php');
     });
+
+
+    $routes->get('print/(:num)', 'PdfController::printID/$1');
 
     //admin
     $routes->get('users', 'Home::users'); //View Users

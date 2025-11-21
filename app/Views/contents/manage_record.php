@@ -138,6 +138,9 @@
                 </div>
             </form>
 
+            <div class="">
+                <a href="print/<?= $n['id'] ?>" class="btn btn-success">Print ID</a>
+            </div>
         </div>
     </div>
 

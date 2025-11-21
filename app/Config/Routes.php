@@ -53,7 +53,7 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     });
 
 
-    $routes->get('print/(:num)', 'PdfController::printID/$1');
+    $routes->get('manage-record/print/(:num)', 'PdfController::printID/$1');
 
     //admin
     $routes->get('users', 'Home::users'); //View Users

@@ -11,120 +11,122 @@ class PdfController extends BaseController
 {
 
     public function printID($id)
-    {
-        $model = new MasterListModel();
-        $user = $model->find($id);
+{
+    $model = new MasterListModel();
+    $user = $model->where("id", $id)->first();
 
-        if (!$user) {
-            return "User not found.";
-        }
-
-        // Call direct-image output generator
-        return $this->idGenerator(
-            $user['name'],
-            $user['address'],
-            $user['dob'],
-            $user['sex'],
-            $user['id_no'],
-            $user['profile'],   // path inside WRITEPATH
-            $user['qrcode'],    // filename only
-            $user['signature']  // signature path
-        );
+    if (!$user) {
+        return "User not found.";
     }
+
+    // Generate QR
+    $Qr = new QrCodeGenerator();
+    $qrcodeHash = md5(SALT . $user['osca_id']);
+    $qrcode = $Qr->generateQr($qrcodeHash); // filename only
+
+    // Generate PNG ID and store temporarily
+    $outputPath = WRITEPATH . "Osca-ID/single/osca_id_" . $id . ".png";
+
+    $this->generateSingleCard(
+        $user['firstname'] . ' ' . $user['middle_name'] . ' ' . $user['lastname'] . ' ' . $user['suffix'],
+        $user['barangay'],
+        $user['birthdate'],
+        $user['sex'],
+        $user['osca_id'],
+        $user['photo'],   // path inside WRITEPATH
+        $qrcode,          // filename only
+        '',               // signature
+        $outputPath       // where to save the PNG
+    );
+
+    // Pass image to the view
+    return view("print/print_single_id", [
+        'imgFile' => $outputPath
+    ]);
+}
 
     /**
-     * DIRECT OUTPUT GENERATOR
+     * DIRECT OUTPUT GENERATOR (CR80 SIZE)
      * NO SAVE ● NO BASE64 ● PRINT READY
      */
-    public function idGenerator(
-        $name,
-        $address,
-        $dob,
-        $sex,
-        $id_no,
-        $profile,
-        $qrcode,
-        $signature = ''
-    ) {
-        // Gender conversion
-        $gender = ($sex === 'M') ? 'MALE' : (($sex === 'F') ? 'FEMALE' : '');
+    public function generateSingleCard(
+    $name,
+    $address,
+    $dob,
+    $sex,
+    $id_no,
+    $profile,
+    $qrcode,
+    $signature,
+    $savePath
+) {
 
-        // Paths
-        $data = [
-            'name'      => $name,
-            'address'   => strtoupper($address),
-            'dob'       => $dob,
-            'sex'       => $gender,
-            'id_number' => $id_no,
-            'photo'     => WRITEPATH . $profile,
-            'qrcode'    => WRITEPATH . 'uploads/qrcodes/' . $qrcode,
-            'signature' => $signature,
-        ];
+    $gender = ($sex === 'M') ? 'MALE' : (($sex === 'F') ? 'FEMALE' : '');
 
-        // Load template (PNG background)
-        set_error_handler(function () {}, E_WARNING);
-        $imgData = file_get_contents(FCPATH . 'template/osca-adjusted-new.png');
-        restore_error_handler();
+    $data = [
+        'name' => $name,
+        'address' => strtoupper($address),
+        'dob' => $dob,
+        'sex' => $gender,
+        'id_number' => $id_no,
+        'photo' => WRITEPATH . $profile,
+        'qrcode' => WRITEPATH . 'uploads/qrcodes/' . $qrcode,
+        'signature' => $signature,
+    ];
 
-        $template = imagecreatefromstring($imgData);
+    /* Load Template */
+    $imgData = file_get_contents(FCPATH . 'template/osca-adjusted.png');
+    $template = imagecreatefromstring($imgData);
 
-        // Text color
-        $black = imagecolorallocate($template, 0, 0, 0);
+    $CR80_WIDTH = 1012;
+    $CR80_HEIGHT = 638;
 
-        // Font
-        $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
+    $cr80 = imagecreatetruecolor($CR80_WIDTH, $CR80_HEIGHT);
+    imagecopyresampled($cr80, $template, 0, 0, 0, 0, $CR80_WIDTH, $CR80_HEIGHT, imagesx($template), imagesy($template));
+    imagedestroy($template);
+    $template = $cr80;
 
-        // Text placements
-        imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
-        imagettftext($template, 18, 0, 375, 333, $black, $font, "DAPITAN CITY, ZAMBOANGA DEL NORTE");
-        imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
-        imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);
-        imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
+    $black = imagecolorallocate($template, 0, 0, 0);
+    $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
 
-        // Universal image loader
-        $loadImage = function ($file) {
-            if (!file_exists($file)) return false;
-            $info = getimagesize($file);
-            if (!$info) return false;
+    /* TEXT */
+    imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
+    imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
+    imagettftext($template, 18, 0, 375, 333, $black, $font, "DAPITAN CITY, ZAMBOANGA DEL NORTE");
+    imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
+    imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);
+    imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
 
-            return match ($info['mime']) {
-                'image/jpeg' => imagecreatefromjpeg($file),
-                'image/png'  => imagecreatefrompng($file),
-                'image/gif'  => imagecreatefromgif($file),
-                default      => false,
-            };
+    /* Image loader */
+    $loadImage = function ($file) {
+        if (!file_exists($file)) return false;
+        $info = getimagesize($file);
+        if (!$info) return false;
+
+        return match ($info['mime']) {
+            'image/jpeg' => imagecreatefromjpeg($file),
+            'image/png' => imagecreatefrompng($file),
+            'image/gif' => imagecreatefromgif($file),
+            default => false,
         };
+    };
 
-        // Profile photo
-        if ($photo = $loadImage($data['photo'])) {
-            imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
-            imagedestroy($photo);
-        }
-
-        // Signature
-        if (!empty($data['signature']) && file_exists($data['signature'])) {
-            if ($sig = $loadImage($data['signature'])) {
-                imagecopyresampled($template, $sig, 150, 700, 0, 0, 300, 120, imagesx($sig), imagesy($sig));
-                imagedestroy($sig);
-            }
-        }
-
-        // QR Code
-        if ($qr = $loadImage($data['qrcode'])) {
-            imagecopyresampled($template, $qr, 790, 420, 0, 0, 170, 170, imagesx($qr), imagesy($qr));
-            imagedestroy($qr);
-        }
-
-        // DIRECT OUTPUT — NO SAVE
-        header("Content-Type: image/png");
-        header("Content-Disposition: inline; filename=\"osca_id.png\"");
-
-        imagepng($template);  // Stream to browser
-        imagedestroy($template);
-
-        exit;
+    /* PHOTO */
+    if ($photo = $loadImage($data['photo'])) {
+        imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
+        imagedestroy($photo);
     }
+
+    /* QR */
+    if ($qr = $loadImage($data['qrcode'])) {
+        imagecopyresampled($template, $qr, 790, 420, 0, 0, 170, 170, imagesx($qr), imagesy($qr));
+        imagedestroy($qr);
+    }
+
+    /* SAVE PNG */
+    imagepng($template, $savePath);
+    imagedestroy($template);
+}
 
     public function makeNewRecord()
     {

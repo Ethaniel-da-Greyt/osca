@@ -25,7 +25,7 @@ class Home extends BaseController
 
             // Define start and end of month
             $startOfMonth = date('Y-m-01');
-            $endOfMonth   = date('Y-m-t');
+            $endOfMonth = date('Y-m-t');
 
             // Paginate only current month's records
             $list = $record
@@ -186,12 +186,13 @@ class Home extends BaseController
             }
 
             $users = $model->findAll();
-
+            
             return view('contents/users', [
                 'users' => $users,
                 'search' => $search,
                 'roleFilter' => $roleFilter,
-                'statusFilter' => $statusFilter
+                'statusFilter' => $statusFilter,
+                'user' => $user
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

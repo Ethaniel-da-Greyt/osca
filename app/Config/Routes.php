@@ -67,4 +67,4 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 });
 
 
-$routes->get('generate', 'PdfController::makeNewRecord'); //manifestinggggggggggggg
+// $routes->get('generate', 'PdfController::makeNewRecord'); //manifestinggggggggggggg

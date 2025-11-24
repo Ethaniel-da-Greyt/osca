@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Print OSCA ID</title>
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
-
     <style>
         body {
             margin: 0;
@@ -33,38 +32,47 @@
             display: block;
         }
 
+        .screen-only {
+            text-align: center;
+        }
+
+        /* PRINT STYLES */
         @media print {
             body {
                 background: white;
                 margin: 0;
                 padding: 0;
+                display: block;
+                min-height: auto;
             }
 
             .id-card {
                 box-shadow: none;
                 margin: 0;
                 padding: 0;
+                width: 85.60mm;
+                height: 53.98mm;
+            }
+
+            /* Hide all screen-only elements when printing */
+            .screen-only {
+                display: none !important;
             }
 
             @page {
                 size: 88mm 60mm;
                 margin: 0;
+                padding: 0;
             }
         }
 
-        .no-print {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
+        /* SCREEN STYLES */
         @media screen {
-            .no-print {
+            .screen-only {
                 display: block;
             }
-        }
 
-        @media print {
-            .no-print {
+            .print-only {
                 display: none;
             }
         }
@@ -81,30 +89,25 @@
             <div style="color: red; text-align: center;">Error: Failed to generate ID card</div>
         <?php endif; ?>
 
-        <div class="no-print mt-5 d-flex justify-content-center align-items-center gap-2">
-            <button class="btn btn-primary" onclick="window.print()" style="">
+        <!-- SCREEN-ONLY ELEMENTS (hidden when printing) -->
+        <div class="screen-only mt-5 d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-primary" onclick="window.print()">
                 🖨️ Print ID Card
             </button>
-
             <button onclick="window.history.back()" class="btn btn-secondary">Cancel</button>
         </div>
-        <br>
-        <small class="fw-semibold">Preview ID - Click print button when ready</small>
+
+        <div class="screen-only">
+            <br>
+            <small class="fw-semibold">Preview ID - Click print button when ready</small>
+        </div>
     </div>
 
-
     <script>
-        // Auto-print when page loads (optional)
-        // window.onload = function() {
-        //     window.print();
-        // }
-
-
-        // Or after a short delay to ensure image is loaded
-        window.addEventListener('load', function () {
-            // Optional: auto-print after 1 second
-            // setTimeout(() => { window.print(); }, 1000);
-        });
+        // Optional: Auto-print when page loads
+        // window.addEventListener('load', function() {
+        //     setTimeout(() => { window.print(); }, 1000);
+        // });
     </script>
 </body>
 

@@ -36,7 +36,7 @@ class QrCodeGenerator extends BaseController
             mkdir($path, 0777, true);
         }
 
-        $filename = uniqid() . '.png';
+        $filename = $data . '.png';
         $result->saveToFile($path . $filename);
 
         return $filename;

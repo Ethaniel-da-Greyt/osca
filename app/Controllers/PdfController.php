@@ -11,122 +11,181 @@ class PdfController extends BaseController
 {
 
     public function printID($id)
-{
-    $model = new MasterListModel();
-    $user = $model->where("id", $id)->first();
+    {
+        $model = new MasterListModel();
+        $user = $model->where("id", $id)->first();
 
-    if (!$user) {
-        return "User not found.";
+        if (!$user) {
+            return "User not found.";
+        }
+
+        // Generate QR
+        $Qr = new QrCodeGenerator();
+        $qrcodeHash = md5(SALT . $user['osca_id']);
+        $qrcode = $Qr->generateQr($qrcodeHash);
+
+        // Build full name properly
+        $fullName = trim($user['firstname'] . ' ' .
+            (!empty($user['middle_name']) ? $user['middle_name'] . ' ' : '') .
+            $user['lastname'] .
+            (!empty($user['suffix']) ? ' ' . $user['suffix'] : ''));
+
+        // Generate the ID card and get base64 directly
+        $idCardBase64 = $this->generateSingleCard(
+            $fullName,
+            $user['barangay'],
+            $user['birthdate'],
+            $user['sex'],
+            $user['osca_id'],
+            $user['photo'],
+            $qrcode,
+            ''
+        );
+
+        if (!$idCardBase64) {
+            return "Failed to generate ID card.";
+        }
+
+        // Pass base64 image directly to view
+        return view("print/print_single_id", [
+            'idCardBase64' => $idCardBase64
+        ]);
     }
-
-    // Generate QR
-    $Qr = new QrCodeGenerator();
-    $qrcodeHash = md5(SALT . $user['osca_id']);
-    $qrcode = $Qr->generateQr($qrcodeHash); // filename only
-
-    // Generate PNG ID and store temporarily
-    $outputPath = WRITEPATH . "Osca-ID/single/osca_id_" . $id . ".png";
-
-    $this->generateSingleCard(
-        $user['firstname'] . ' ' . $user['middle_name'] . ' ' . $user['lastname'] . ' ' . $user['suffix'],
-        $user['barangay'],
-        $user['birthdate'],
-        $user['sex'],
-        $user['osca_id'],
-        $user['photo'],   // path inside WRITEPATH
-        $qrcode,          // filename only
-        '',               // signature
-        $outputPath       // where to save the PNG
-    );
-
-    // Pass image to the view
-    return view("print/print_single_id", [
-        'imgFile' => $outputPath
-    ]);
-}
 
     /**
      * DIRECT OUTPUT GENERATOR (CR80 SIZE)
      * NO SAVE ● NO BASE64 ● PRINT READY
      */
     public function generateSingleCard(
-    $name,
-    $address,
-    $dob,
-    $sex,
-    $id_no,
-    $profile,
-    $qrcode,
-    $signature,
-    $savePath
-) {
+        $name,
+        $address,
+        $dob,
+        $sex,
+        $id_no,
+        $profile,
+        $qrcode,
+        $signature
+    ) {
+        try {
+            $gender = ($sex === 'M') ? 'MALE' : (($sex === 'F') ? 'FEMALE' : '');
 
-    $gender = ($sex === 'M') ? 'MALE' : (($sex === 'F') ? 'FEMALE' : '');
+            // Handle photo path
+            $photoPath = $profile;
+            if (!file_exists($photoPath) && file_exists(WRITEPATH . $profile)) {
+                $photoPath = WRITEPATH . $profile;
+            }
 
-    $data = [
-        'name' => $name,
-        'address' => strtoupper($address),
-        'dob' => $dob,
-        'sex' => $gender,
-        'id_number' => $id_no,
-        'photo' => WRITEPATH . $profile,
-        'qrcode' => WRITEPATH . 'uploads/qrcodes/' . $qrcode,
-        'signature' => $signature,
-    ];
+            // Handle QR code path
+            $qrcodePath = WRITEPATH . 'uploads/qrcodes/' . $qrcode;
 
-    /* Load Template */
-    $imgData = file_get_contents(FCPATH . 'template/osca-adjusted.png');
-    $template = imagecreatefromstring($imgData);
+            $data = [
+                'name' => $name,
+                'address' => strtoupper($address),
+                'dob' => $dob,
+                'sex' => $gender,
+                'id_number' => $id_no,
+                'photo' => $photoPath,
+                'qrcode' => $qrcodePath,
+                'signature' => $signature,
+            ];
 
-    $CR80_WIDTH = 1012;
-    $CR80_HEIGHT = 638;
+            /* Load Template */
+            $templatePath = FCPATH . 'template/osca-adjusted.png';
+            if (!file_exists($templatePath)) {
+                log_message('error', "Template not found: " . $templatePath);
+                return false;
+            }
 
-    $cr80 = imagecreatetruecolor($CR80_WIDTH, $CR80_HEIGHT);
-    imagecopyresampled($cr80, $template, 0, 0, 0, 0, $CR80_WIDTH, $CR80_HEIGHT, imagesx($template), imagesy($template));
-    imagedestroy($template);
-    $template = $cr80;
+            $imgData = file_get_contents($templatePath);
+            $template = imagecreatefromstring($imgData);
 
-    $black = imagecolorallocate($template, 0, 0, 0);
-    $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
+            if (!$template) {
+                log_message('error', "Failed to create image from template");
+                return false;
+            }
 
-    /* TEXT */
-    imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
-    imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
-    imagettftext($template, 18, 0, 375, 333, $black, $font, "DAPITAN CITY, ZAMBOANGA DEL NORTE");
-    imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
-    imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);
-    imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
+            $CR80_WIDTH = 1012;
+            $CR80_HEIGHT = 638;
 
-    /* Image loader */
-    $loadImage = function ($file) {
-        if (!file_exists($file)) return false;
-        $info = getimagesize($file);
-        if (!$info) return false;
+            $cr80 = imagecreatetruecolor($CR80_WIDTH, $CR80_HEIGHT);
+            if (!$cr80) {
+                log_message('error', "Failed to create true color image");
+                imagedestroy($template);
+                return false;
+            }
 
-        return match ($info['mime']) {
-            'image/jpeg' => imagecreatefromjpeg($file),
-            'image/png' => imagecreatefrompng($file),
-            'image/gif' => imagecreatefromgif($file),
-            default => false,
-        };
-    };
+            imagecopyresampled($cr80, $template, 0, 0, 0, 0, $CR80_WIDTH, $CR80_HEIGHT, imagesx($template), imagesy($template));
+            imagedestroy($template);
+            $template = $cr80;
 
-    /* PHOTO */
-    if ($photo = $loadImage($data['photo'])) {
-        imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
-        imagedestroy($photo);
+            $black = imagecolorallocate($template, 0, 0, 0);
+            $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
+
+            if (!file_exists($font)) {
+                log_message('error', "Font file not found: " . $font);
+                imagedestroy($template);
+                return false;
+            }
+
+            /* TEXT */
+            imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
+            imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
+            imagettftext($template, 18, 0, 375, 333, $black, $font, "DAPITAN CITY, ZAMBOANGA DEL NORTE");
+            imagettftext($template, 20, 0, 375, 400, $black, $font, $data['dob']);
+            imagettftext($template, 20, 0, 375, 475, $black, $font, $data['sex']);
+            imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
+
+            /* Image loader */
+            $loadImage = function ($file) {
+                if (!file_exists($file)) {
+                    log_message('error', "Image file not found: " . $file);
+                    return false;
+                }
+
+                $info = getimagesize($file);
+                if (!$info) {
+                    log_message('error', "Invalid image file: " . $file);
+                    return false;
+                }
+
+                return match ($info['mime']) {
+                    'image/jpeg' => imagecreatefromjpeg($file),
+                    'image/png' => imagecreatefrompng($file),
+                    'image/gif' => imagecreatefromgif($file),
+                    default => false,
+                };
+            };
+
+            /* PHOTO */
+            if ($photo = $loadImage($data['photo'])) {
+                imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
+                imagedestroy($photo);
+            }
+
+            /* QR */
+            if ($qr = $loadImage($data['qrcode'])) {
+                imagecopyresampled($template, $qr, 790, 420, 0, 0, 170, 170, imagesx($qr), imagesy($qr));
+                imagedestroy($qr);
+            }
+
+            /* OUTPUT AS BASE64 WITHOUT SAVING */
+            ob_start();
+            imagepng($template);
+            $imageData = ob_get_contents();
+            ob_end_clean();
+
+            $base64 = base64_encode($imageData);
+
+            // Clean up
+            imagedestroy($template);
+
+            return $base64;
+
+        } catch (\Exception $e) {
+            log_message('error', 'ID Card generation error: ' . $e->getMessage());
+            return false;
+        }
     }
-
-    /* QR */
-    if ($qr = $loadImage($data['qrcode'])) {
-        imagecopyresampled($template, $qr, 790, 420, 0, 0, 170, 170, imagesx($qr), imagesy($qr));
-        imagedestroy($qr);
-    }
-
-    /* SAVE PNG */
-    imagepng($template, $savePath);
-    imagedestroy($template);
-}
 
     public function makeNewRecord()
     {

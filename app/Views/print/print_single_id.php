@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Print OSCA ID</title>
+    <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
+
     <style>
         body {
             margin: 0;
@@ -70,27 +72,33 @@
 </head>
 
 <body>
-    <div class="no-print">
-        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px;">
-            🖨️ Print ID Card
-        </button>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <?php if (!empty($idCardBase64)): ?>
+            <div class="id-card">
+                <img src="data:image/png;base64,<?= $idCardBase64 ?>" class="full-id">
+            </div>
+        <?php else: ?>
+            <div style="color: red; text-align: center;">Error: Failed to generate ID card</div>
+        <?php endif; ?>
+
+        <div class="no-print mt-5 d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-primary" onclick="window.print()" style="">
+                🖨️ Print ID Card
+            </button>
+
+            <button onclick="window.history.back()" class="btn btn-secondary">Cancel</button>
+        </div>
         <br>
-        <small>Preview below - Click print button when ready</small>
+        <small class="fw-semibold">Preview ID - Click print button when ready</small>
     </div>
 
-    <?php if (!empty($idCardBase64)): ?>
-        <div class="id-card">
-            <img src="data:image/png;base64,<?= $idCardBase64 ?>" class="full-id">
-        </div>
-    <?php else: ?>
-        <div style="color: red; text-align: center;">Error: Failed to generate ID card</div>
-    <?php endif; ?>
 
     <script>
         // Auto-print when page loads (optional)
         // window.onload = function() {
         //     window.print();
         // }
+
 
         // Or after a short delay to ensure image is loaded
         window.addEventListener('load', function () {

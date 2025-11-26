@@ -5,14 +5,48 @@
 <div class="container-fluid">
     <div class="row g-4">
         <?php foreach ($units as $unit => $count): ?>
+
+            <?php
+            // Extract unit number (e.g. "Unit 1" → "1")
+            $unit_no = preg_replace('/[^0-9]/', '', $unit);
+            ?>
+
             <div class="col-md-2">
                 <div class="card shadow-sm border-0">
-                    <div class="card-body">
+                    <div class="card-body cursor-pointer" data-bs-toggle="modal" data-bs-target="#unit<?= esc($unit_no) ?>">
+
                         <h6 class="card-title text-muted"><?= esc(ucwords($unit)) ?></h6>
                         <h2 class="fw-bold"><?= esc($count) ?></h2>
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="unit<?= esc($unit_no) ?>">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark">
+                            <h5 class="modal-title text-white">Barangays in Unit <?= esc($unit_no) ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <?php if (!empty($barangaysByUnit[$unit_no])): ?>
+                                <ul>
+                                    <?php foreach ($barangaysByUnit[$unit_no] as $b): ?>
+                                        <li><?= esc($b) ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p class="text-muted">No barangays found for this unit.</p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         <?php endforeach ?>
     </div>
 
@@ -70,5 +104,7 @@
         <?= $pager->links('default', 'bootstrap_full') ?>
     </div>
 </div>
+
+
 
 <?= $this->endSection() ?>

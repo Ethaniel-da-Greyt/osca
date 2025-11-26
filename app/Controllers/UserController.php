@@ -22,11 +22,11 @@ class UserController extends BaseController
             $model = new UsersModel();
 
             $data = [
-                'lastname'  => trim($this->request->getPost('lastname')),
+                'lastname' => trim($this->request->getPost('lastname')),
                 'firstname' => trim($this->request->getPost('firstname')),
-                'username'  => trim($this->request->getPost('username')),
-                'role'      => $this->request->getPost('role'),
-                'isDelete'  => $this->request->getPost('isDelete') == 1 ? 1 : 0, // Active/Inactive
+                'username' => trim($this->request->getPost('username')),
+                'role' => $this->request->getPost('role'),
+                'isDelete' => $this->request->getPost('isDelete') == 1 ? 1 : 0, // Active/Inactive
             ];
 
             // Optional password update

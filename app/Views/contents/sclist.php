@@ -18,8 +18,7 @@
                     <select name="filter" id="filter" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Choose Barangay --</option>
                         <?php foreach ($barangay as $b): ?>
-                            <option value="<?= esc($b['barangay']) ?>"
-                                <?= ($filter === $b['barangay']) ? 'selected' : '' ?>>
+                            <option value="<?= esc($b['barangay']) ?>" <?= ($filter === $b['barangay']) ? 'selected' : '' ?>>
                                 <?= esc(ucwords($b['barangay'])) ?>
                             </option>
                         <?php endforeach; ?>
@@ -34,7 +33,7 @@
 <div class="card mt-4 shadow-sm border-0 mb-5">
     <div class="card-header bg-white fw-bold">Senior Citizen Lists</div>
     <div class="card-body">
-        <?php if (!empty($lists)) : ?>
+        <?php if (!empty($lists)): ?>
             <table class="table table-responsive table-bordered table-hover">
                 <thead class=" table-dark">
                     <tr>
@@ -55,11 +54,16 @@
                 </thead>
                 <tbody>
                     <?php foreach ($lists as $n): ?>
-                        <tr class="t-row" onclick="window.location.href='<?= base_url('/osca/manage-record/' . $n['id']) ?>'" style="cursor: pointer;">
+                        <tr class="t-row" onclick="window.location.href='<?= base_url('/osca/manage-record/' . $n['id']) ?>'"
+                            style="cursor: pointer;">
                             <td><?= esc($n['lastname']) ?></td>
                             <td><?= esc($n['firstname']) ?></td>
                             <td><?= esc($n['middle_name']) ?></td>
-                            <td><?= esc($n['suffix']) ?></td>
+                            <td><?= esc($n['suffix']) ?> <span
+                                    class="<?= esc($n['isDeceased'] == 1 ? 'badge text-bg-danger' : '') ?> me-2">
+                                    <?= esc($n['isDeceased'] == 1 ? 'Deceased' : '') ?>
+                                </span>
+                            </td>
                             <td><?= esc($n['sex']) ?></td>
                             <td><?= esc($n['barangay']) ?></td>
                             <td><?= esc($n['unit']) ?></td>
@@ -68,11 +72,11 @@
                             <td><?= esc($n['osca_id']) ?></td>
                             <td><?= esc($n['remarks']) ?></td>
                             <td><?= esc(!empty($n['date_applied'])
-                                    ? date('F d, Y', strtotime($n['date_applied']))
-                                    : 'N/A') ?></td>
+                                ? date('F d, Y', strtotime($n['date_applied']))
+                                : 'N/A') ?></td>
                             <td><?= esc(!empty($n['date_issued'])
-                                    ? date('F d, Y', strtotime($n['date_issued']))
-                                    : 'N/A') ?></td>
+                                ? date('F d, Y', strtotime($n['date_issued']))
+                                : 'N/A') ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

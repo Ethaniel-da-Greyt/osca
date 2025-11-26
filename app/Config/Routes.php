@@ -22,6 +22,8 @@ $routes->post('/osca-register', 'AuthController::register');
 //     return view('Osca-ID-back');
 // }); //TESTINGGGGGGGGGGGGGGGGGGGGGGGGG IDDDDDDDDDDDDD
 
+// $routes->get('/generate', 'Home::generateNewQr'); //TESTING
+
 $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('/', 'Home::index'); //Dashboard Page
@@ -44,6 +46,8 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     $routes->post('export-record/pdf/unit', 'ExportController::exportPdfByUnit'); //Export PDF by Barangay UNit
     $routes->post('export-record/pdf/barangay', 'ExportController::exportPdfByBarangay'); //Export PDF by Barangay
 
+    //IsDeceased
+    $routes->post('isDeceased/(:num)', 'IsDeceasedController::IsDeceased/$1');
 
     //Select Batch for ID Printing
     $routes->get('select-batch', 'Home::listBatches');

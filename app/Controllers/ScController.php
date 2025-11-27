@@ -103,7 +103,7 @@ class ScController extends BaseController
                 $activitylog->makeLog(
                     $this->userSession(),
                     $data['osca_id'],
-                    'Added new record',
+                    'Added new OSCA record',
                     "Added new record ($name), OSCA ID: " . $data['osca_id']
                 );
 

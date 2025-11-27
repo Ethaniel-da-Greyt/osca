@@ -20,7 +20,9 @@ class ActivityLogController extends BaseController
                 'description' => $description,
             ];
 
-            if ($model->insert($data)) {
+            $store = $model->insert($data);
+
+            if ($store) {
                 return true;
             }
 

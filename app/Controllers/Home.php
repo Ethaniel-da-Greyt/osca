@@ -68,10 +68,21 @@ class Home extends BaseController
                 'Unit 5' => $unitCounts[5]
             ];
 
+            $barangay = new BarangayListModel();
+            $barangays = $barangay->findAll();
+
+            // Group barangays by unit
+            $barangaysByUnit = [];
+            foreach ($barangays as $br) {
+                $barangaysByUnit[$br['unit']][] = $br['barangay'];
+            }
+
             return view('index', [
+                'barangay' => $barangays,
+                'barangaysByUnit' => $barangaysByUnit,
                 'new_add' => $list,
                 'units' => $units,
-                'pager' => $pager // Pass the pager to view
+                'pager' => $pager,
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -130,17 +141,32 @@ class Home extends BaseController
 
             $barangaylist = $barangay->findAll();
 
+
             $list = $records->where('isDelete', 0)->where('id', $id)->first();
             return view('contents/manage_record', [
                 'n' => $list,
                 'barangay' => $barangaylist,
+                'qrcode' => $list['qrcode'],
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
+    //To generate new QR codes for all records - TESTING PURPOSES ONLY
+    // public function generateNewQr()
+    // {
+    //     $scList = new MasterListModel();
+    //     $lists = $scList->findAll();
 
+    //     foreach ($lists as $sc) {
+    //         $qrcode = new QrCodeGenerator();
+    //         $hash = md5(SALT . $sc['osca_id']);
+    //         $qrcode->Qr($hash);
+    //     }
+
+    //     return $this->response->setJSON(['message' => 'Done generating all QRs']);
+    // }
     public function addrecord()
     {
         try {

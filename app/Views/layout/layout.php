@@ -142,7 +142,7 @@ $user = $session->get('user');
                         <i class="fa-solid fa-plus"></i> Add Records
                     </a>
                     <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
-                        <i class="fa fa-gear"></i> Export Birthday/Records
+                        <i class="fa fa-gear"></i> Exports
                     </a>
                     <a href="/osca/select-batch" class="<?= $this->renderSection('select-batch') ?>">
                         <i class="fa fa-id-badge"></i> Print IDs

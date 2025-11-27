@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="card border-0 shadow-sm p-4">
         <div class="text-center text-primary mb-4">
-            <h3 class="fw-bold">Select Format</h3>
+            <h3 class="fw-bold">Export Records</h3>
             <p class="text-muted mb-0">Choose an option below to export or print your records</p>
         </div>
 
@@ -171,7 +171,7 @@
         <div class="col-md-6 col-lg-5 item-center mx-auto">
             <button class="btn btn-info w-100 py-4 shadow-sm fw-semibold text-white" data-bs-toggle="modal"
                 data-bs-target="#birthday">
-                <i class="fa-regular fa-calendar"></i> Export by Birthday in Excel
+                <i class="fa-regular fa-calendar"></i> Export Birthday in Excel
             </button>
         </div>
     </div>

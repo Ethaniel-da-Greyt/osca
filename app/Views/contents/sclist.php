@@ -46,7 +46,6 @@
                         <th>Barangay</th>
                         <th>Unit</th>
                         <th>Birthdate</th>
-                        <th>Age</th>
                         <th>Remarks</th>
                         <th>Date Applied</th>
                         <th>Date Issued</th>
@@ -69,7 +68,6 @@
                             <td><?= esc($n['barangay']) ?></td>
                             <td><?= esc($n['unit']) ?></td>
                             <td><?= esc(date('F d, Y', strtotime($n['birthdate']))) ?></td>
-                            <td><?= esc($n['age']) ?></td>
                             <td><?= esc($n['remarks']) ?></td>
                             <td><?= esc(!empty($n['date_applied'])
                                 ? date('F d, Y', strtotime($n['date_applied']))

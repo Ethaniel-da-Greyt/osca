@@ -22,6 +22,9 @@ class ScController extends BaseController
             $birthdate = $this->request->getPost('birthdate');
             $age = $this->calculateAge($birthdate);
 
+            if ($age < 60) {
+                return redirect()->back()->with('error', 'Age must be 60 years old and above to be registered as Senior Citizen.');
+            }
             //Photo
             $photo = $this->fileUpload($this->request->getFile('photo'), $this->request->getPost('lastname'), $this->request->getPost('osca_id'));
 
@@ -39,7 +42,7 @@ class ScController extends BaseController
                 'barangay' => $this->request->getPost('barangay'),
                 'unit' => $this->request->getPost('unit'),
                 'birthdate' => $birthdate,
-                'age' => $age, // auto computed
+                'age' => $age, // auto computed 
                 'osca_id' => $this->request->getPost('osca_id'),
                 'date_issued' => $this->request->getPost('date_issued') ?: null,
                 'date_applied' => $this->request->getPost('date_applied') ?: null,
@@ -47,6 +50,12 @@ class ScController extends BaseController
                 'qrcode' => $qrcodeHash,
                 'remarks' => $this->request->getPost('remarks'),
             ];
+
+            $check = $model->where('osca_id', $data['osca_id'])->first();
+
+            if ($check) {
+                return redirect()->back()->with('error', 'OSCA ID already exists!');
+            }
 
             if ($model->insert($data)) {
 
@@ -75,7 +84,7 @@ class ScController extends BaseController
     public function update()
     {
         try {
-            
+
             $model = new MasterListModel();
             $id = $this->request->getPost('id');
 

@@ -22,10 +22,18 @@ $qrImg = (file_exists($qrPath))
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
 
-            <div class="bg-dark rounded">
-                <h3 class="fw-bold p-3 mb-4 text-white">
-                    <?= esc(strtoupper($n['firstname'] . ' ' . $n['lastname'])) ?>
-                </h3>
+            <div class="bg-dark rounded d-flex align-items-center p-3 mb-4">
+                <!-- Back Button -->
+                <button class="btn btn-light btn-sm text-dark me-3" onclick="window.history.back()">
+                    <i class="fa-solid fa-arrow-left me-1"></i>
+                </button>
+
+                <!-- Title -->
+                <div class="flex-grow-1">
+                    <h3 class="fw-bold text-white mb-0">
+                        <?= esc(strtoupper($n['firstname'] . ' ' . $n['lastname'])) ?>
+                    </h3>
+                </div>
             </div>
 
             <div class="row">
@@ -191,8 +199,9 @@ $qrImg = (file_exists($qrPath))
                 <span class="btn btn-close" data-bs-dismiss="modal"></span>
             </div>
 
-            <form action="/osca/records/update-record/<?= esc($n['id']) ?>" method="POST" enctype="multipart/form-data">
+            <form action="/osca/manage-record" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <input type="hidden" name="id" value="<?= esc($n['id']) ?>">
 
                     <div class="row mb-3">
                         <div class="col-6">
@@ -304,8 +313,8 @@ $qrImg = (file_exists($qrPath))
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label fw-semibold">Remarks</label>
-                        <textarea name="remarks" id="" class="form-control" value="<?= esc($n['remarks']) ?>"
-                            placeholder="Remarks here*"></textarea>
+                        <textarea name="remarks" id="" class="form-control"
+                            placeholder="Remarks here*"><?= esc($n['remarks']) ?></textarea>
                     </div>
 
                 </div>

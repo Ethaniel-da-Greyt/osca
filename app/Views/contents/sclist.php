@@ -37,6 +37,7 @@
             <table class="table table-responsive table-bordered table-hover">
                 <thead class=" table-dark">
                     <tr>
+                        <th>OSCA ID No.</th>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Middle Name</th>
@@ -46,7 +47,6 @@
                         <th>Unit</th>
                         <th>Birthdate</th>
                         <th>Age</th>
-                        <th>OSCA ID No.</th>
                         <th>Remarks</th>
                         <th>Date Applied</th>
                         <th>Date Issued</th>
@@ -56,6 +56,7 @@
                     <?php foreach ($lists as $n): ?>
                         <tr class="t-row" onclick="window.location.href='<?= base_url('/osca/manage-record/' . $n['id']) ?>'"
                             style="cursor: pointer;">
+                            <td><?= esc($n['osca_id']) ?></td>
                             <td><?= esc($n['lastname']) ?></td>
                             <td><?= esc($n['firstname']) ?></td>
                             <td><?= esc($n['middle_name']) ?></td>
@@ -69,7 +70,6 @@
                             <td><?= esc($n['unit']) ?></td>
                             <td><?= esc(date('F d, Y', strtotime($n['birthdate']))) ?></td>
                             <td><?= esc($n['age']) ?></td>
-                            <td><?= esc($n['osca_id']) ?></td>
                             <td><?= esc($n['remarks']) ?></td>
                             <td><?= esc(!empty($n['date_applied'])
                                 ? date('F d, Y', strtotime($n['date_applied']))

@@ -60,6 +60,7 @@
                 <table class="table table-responsive table-bordered">
                     <thead class="table-dark">
                         <tr>
+                            <th>OSCA ID No.</th>
                             <th>Last Name</th>
                             <th>First Name</th>
                             <th>Middle Name</th>
@@ -68,8 +69,6 @@
                             <th>Barangay</th>
                             <th>Unit</th>
                             <th>Birthdate</th>
-                            <th>Age</th>
-                            <th>OSCA ID No.</th>
                             <th>Remarks</th>
                             <th>Date Issued</th>
                             <th>Date Applied</th>
@@ -78,6 +77,7 @@
                     <tbody>
                         <?php foreach ($new_add as $n): ?>
                             <tr>
+                                <td><?= esc($n['osca_id']) ?></td>
                                 <td><?= esc($n['lastname']) ?></td>
                                 <td><?= esc($n['firstname']) ?></td>
                                 <td><?= esc($n['middle_name']) ?></td>
@@ -86,8 +86,6 @@
                                 <td><?= esc($n['barangay']) ?></td>
                                 <td><?= esc($n['unit']) ?></td>
                                 <td><?= esc($n['birthdate']) ?></td>
-                                <td><?= esc($n['age']) ?></td>
-                                <td><?= esc($n['osca_id']) ?></td>
                                 <td><?= esc($n['remarks']) ?></td>
                                 <td><?= esc($n['date_issued']) ?></td>
                                 <td><?= esc($n['date_applied']) ?></td>

@@ -4,32 +4,20 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MasterListModel extends Model
+class ActivityLogModel extends Model
 {
-    protected $table            = 'masterlist';
+    protected $table            = 'activity_logs';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'firstname',
-        'lastname',
-        'middle_name',
-        'suffix',
-        'sex',
-        'barangay',
-        'unit',
-        'birthdate',
-        'age',
-        'osca_id',
-        'remarks',
-        'photo',
-        'date_issued',
-        'date_applied',
-        'qrcode',
-        'isDelete',
-        'isDeceased'
+        'user_id',
+        'resource_id',
+        'action',
+        'description',
+
     ];
 
     protected bool $allowEmptyInserts = false;

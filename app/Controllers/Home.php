@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\ActivityLogModel;
 use App\Models\BarangayListModel;
 use App\Models\MasterListModel;
 use App\Models\UsersModel;
@@ -10,6 +11,21 @@ class Home extends BaseController
 {
     public function loginPage()
     {
+        $model = new UsersModel();
+
+        $check = $model->findAll();
+
+        if (empty($check)) {
+            $model->insert([
+                'firstname' => 'System',
+                'lastname' => 'Administrator',
+                'username' => 'admin',
+                'password' => password_hash('qweqwe', PASSWORD_DEFAULT),
+                'role' => 'admin',
+                'isDelete' => 0
+            ]);
+        }
+
         return view('login');
     }
     public function register()
@@ -154,6 +170,7 @@ class Home extends BaseController
     public function users()
     {
         try {
+
             $model = new UsersModel();
             $session = session();
             $get = $session->get('isLoggedIn');
@@ -186,7 +203,7 @@ class Home extends BaseController
             }
 
             $users = $model->findAll();
-            
+
             return view('contents/users', [
                 'users' => $users,
                 'search' => $search,
@@ -202,13 +219,15 @@ class Home extends BaseController
     public function manageUser($id)
     {
         try {
+            $activityLog = new ActivityLogModel;
             $user = new UsersModel();
 
 
             $userInfo = $user->where('id', $id)->first();
-
+            $logs = $activityLog->where('user_id', $id)->findAll();
             return view('contents/manage_user', [
                 'n' => $userInfo,
+                'logs' => $logs
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

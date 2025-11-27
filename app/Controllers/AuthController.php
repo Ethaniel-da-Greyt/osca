@@ -44,6 +44,13 @@ class AuthController extends BaseController
                         'user' => $check,
                         'isLoggedIn' => true
                     ]);
+                    $activitylog = new ActivityLogController();
+                    $activitylog->makeLog(
+                        $check['id'],
+                        '',
+                        'Logged In',
+                        'Logged In'
+                    );
                     return redirect()->to('/osca');
                 } else {
                     return redirect()->back()->withInput()->with('error', 'Incorrect Password');
@@ -59,6 +66,14 @@ class AuthController extends BaseController
 
     public function logout()
     {
+        $user = session()->get('user');
+        $activitylog = new ActivityLogController();
+        $activitylog->makeLog(
+            $user['id'],
+            '',
+            'Logged Out',
+            'Logged Out'
+        );
         session()->destroy();
         return redirect()->to('/login');
     }

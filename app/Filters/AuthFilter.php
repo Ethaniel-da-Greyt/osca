@@ -25,9 +25,18 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session()->get('isLoggedIn')) {
+        if (!session()->has('user')) {
             return redirect()->to('/login')->with('error', 'You must login first.');
         }
+        // if (!session()->get('isLoggedIn')) {
+        //     return redirect()->to('/login')->with('error', 'You must login first.');
+        // }
+
+        // $user = session()->get('user');
+        // if (!$user) {
+        //     // Not logged in → redirect to login page
+        //     return redirect()->to('/login')->with('error', 'Please log in first.');
+        // }
     }
 
     /**

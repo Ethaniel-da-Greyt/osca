@@ -9,6 +9,13 @@ use App\Models\MasterListModel;
 
 class PdfController extends BaseController
 {
+    private function userSession()
+    {
+        $user = session()->get('user');
+
+
+        return $user['id'];
+    }
 
     public function printID($id)
     {
@@ -46,6 +53,8 @@ class PdfController extends BaseController
             return "Failed to generate ID card.";
         }
 
+        $activitylog = new ActivityLogController();
+        $activitylog->makeLog($this->userSession(), '', 'Print Osca ID (' . $fullName . '), OSCA ID: ' . $user['osca_id'], '');
         // Pass base64 image directly to view
         return view("print/print_single_id", [
             'idCardBase64' => $idCardBase64
@@ -180,13 +189,13 @@ class PdfController extends BaseController
             imagedestroy($template);
 
             return $base64;
-
         } catch (\Exception $e) {
             log_message('error', 'ID Card generation error: ' . $e->getMessage());
             return false;
         }
     }
 
+    //To generate IDs by batch folders
     public function makeNewRecord()
     {
         $batchPath = WRITEPATH . 'Osca-ID/batch-4/';
@@ -228,85 +237,85 @@ class PdfController extends BaseController
         return $this->response->setJSON(['message' => 'Done']);
     }
 
-    public function generateBooklet(
-        $name,
-        $address,
-        $id_no,
-        $profile
-    ) {
-        // SAMPLE DATA — delete these overrides when using real data
-        // $name    = 'JOSE MARI CHAN';
-        // $address = 'SICAYAB BUCANA';
-        // $id_no   = '0012345';
-        // $profile = WRITEPATH . 'uploads/photo.jpg';
+    // public function generateBooklet(
+    //     $name,
+    //     $address,
+    //     $id_no,
+    //     $profile
+    // ) {
+    //     // SAMPLE DATA — delete these overrides when using real data
+    //     // $name    = 'JOSE MARI CHAN';
+    //     // $address = 'SICAYAB BUCANA';
+    //     // $id_no   = '0012345';
+    //     // $profile = WRITEPATH . 'uploads/photo.jpg';
 
-        // Prepare Data
-        $data = [
-            'name' => strtoupper($name),
-            'address' => 'BRGY. ' . strtoupper($address) . ', DAPITAN CITY, ZAMBOANGA DEL NORTE',
-            'id_number' => $id_no,
-            'photo' => $profile,
-        ];
+    //     // Prepare Data
+    //     $data = [
+    //         'name' => strtoupper($name),
+    //         'address' => 'BRGY. ' . strtoupper($address) . ', DAPITAN CITY, ZAMBOANGA DEL NORTE',
+    //         'id_number' => $id_no,
+    //         'photo' => $profile,
+    //     ];
 
-        // Ignore warnings from imagecreate
-        set_error_handler(function () {}, E_WARNING);
+    //     // Ignore warnings from imagecreate
+    //     set_error_handler(function () {}, E_WARNING);
 
-        // Load booklet template
-        $Imgdata = file_get_contents(WRITEPATH . 'template/booklet-template.png');
-        $template = imagecreatefromstring($Imgdata);
+    //     // Load booklet template
+    //     $Imgdata = file_get_contents(WRITEPATH . 'template/booklet-template.png');
+    //     $template = imagecreatefromstring($Imgdata);
 
-        restore_error_handler();
+    //     restore_error_handler();
 
-        // Colors
-        $black = imagecolorallocate($template, 0, 0, 0);
+    //     // Colors
+    //     $black = imagecolorallocate($template, 0, 0, 0);
 
-        // Font
-        $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
+    //     // Font
+    //     $font = WRITEPATH . "fonts/Montserrat-Bold.ttf";
 
-        // Write text
-        imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
-        imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
-        imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
+    //     // Write text
+    //     imagettftext($template, 21, 0, 375, 230, $black, $font, $data['name']);
+    //     imagettftext($template, 18, 0, 375, 310, $black, $font, $data['address']);
+    //     imagettftext($template, 20, 0, 375, 545, $black, $font, $data['id_number']);
 
-        // Universal image loader
-        $createImageFromFile = function ($file) {
-            if (!file_exists($file))
-                return false;
-            $info = getimagesize($file);
-            if (!$info)
-                return false;
+    //     // Universal image loader
+    //     $createImageFromFile = function ($file) {
+    //         if (!file_exists($file))
+    //             return false;
+    //         $info = getimagesize($file);
+    //         if (!$info)
+    //             return false;
 
-            return match ($info['mime']) {
-                'image/jpeg' => imagecreatefromjpeg($file),
-                'image/png' => imagecreatefrompng($file),
-                'image/gif' => imagecreatefromgif($file),
-                default => false,
-            };
-        };
+    //         return match ($info['mime']) {
+    //             'image/jpeg' => imagecreatefromjpeg($file),
+    //             'image/png' => imagecreatefrompng($file),
+    //             'image/gif' => imagecreatefromgif($file),
+    //             default => false,
+    //         };
+    //     };
 
-        // Add Photo (1x1)
-        if ($photo = $createImageFromFile($data['photo'])) {
-            imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
-            imagedestroy($photo);
-        }
+    //     // Add Photo (1x1)
+    //     if ($photo = $createImageFromFile($data['photo'])) {
+    //         imagecopyresampled($template, $photo, 90, 200, 0, 0, 240, 240, imagesx($photo), imagesy($photo));
+    //         imagedestroy($photo);
+    //     }
 
-        // Output directory (creates it if missing)
-        $outputDir = WRITEPATH . "booklets/";
-        if (!is_dir($outputDir)) {
-            mkdir($outputDir, 0777, true);
-        }
+    //     // Output directory (creates it if missing)
+    //     $outputDir = WRITEPATH . "booklets/";
+    //     if (!is_dir($outputDir)) {
+    //         mkdir($outputDir, 0777, true);
+    //     }
 
-        // Final output filename
-        $output = $outputDir . "booklet_" . $id_no . ".png";
+    //     // Final output filename
+    //     $output = $outputDir . "booklet_" . $id_no . ".png";
 
-        // Save
-        imagepng($template, $output, 9);
+    //     // Save
+    //     imagepng($template, $output, 9);
 
-        // Cleanup
-        imagedestroy($template);
+    //     // Cleanup
+    //     imagedestroy($template);
 
-        return $output; // return path of generated booklet
-    }
+    //     return $output; // return path of generated booklet
+    // }
 
 
 
@@ -437,6 +446,7 @@ class PdfController extends BaseController
         imagedestroy($template);
 
         // Download the file
+
         return true;
     }
 

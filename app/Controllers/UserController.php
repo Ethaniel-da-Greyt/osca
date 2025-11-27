@@ -8,6 +8,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class UserController extends BaseController
 {
+
+
+
     public function updateUser($id)
     {
         try {
@@ -35,7 +38,38 @@ class UserController extends BaseController
                 $data['password'] = password_hash($password, PASSWORD_DEFAULT);
             }
 
-            $model->update($id, $data);
+            $oldRecord = $model->find($id);
+
+            // Perform update
+            $updateResult = $model->update($id, $data);
+
+            if ($updateResult > 0) {
+                $sc = $model->find($id);
+
+                // --- Activity Logging for each changed field ---
+                $changes = [];
+                foreach ($data as $key => $value) {
+                    if (isset($oldRecord[$key]) && $oldRecord[$key] != $value) {
+                        $changes[] = ucfirst(str_replace('_', ' ', $key)) . ": '{$oldRecord[$key]}' → '$value'";
+                    }
+                }
+
+                // Include photo change if applicable
+                if (isset($sc['photo']) && isset($oldRecord['photo']) && $sc['photo'] != $oldRecord['photo']) {
+                    $changes[] = "Photo updated";
+                }
+
+                // Log only if there are changes
+                if (!empty($changes)) {
+                    $activitylog = new ActivityLogController();
+                    $activitylog->makeLog(
+                        $user['id'],
+                        $id,
+                        'Updated record (' . $sc['username'] . ')',
+                        implode(', ', $changes)
+                    );
+                }
+            }
 
             return redirect()
                 ->back()->withInput()

@@ -29,8 +29,9 @@ class MasterListModel extends Model
         'isDeceased',
         'date_issued',
         'date_applied',
+        'qrcode',
         'isDelete',
-
+        'isDeceased'
     ];
 
     protected bool $allowEmptyInserts = false;

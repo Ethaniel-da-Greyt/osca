@@ -35,6 +35,9 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
     $routes->post('manage-record', 'ScController::update'); //Update Record 
 
     $routes->get('export-record', 'Home::exportView'); //View Export Record Page
+    $routes->post('export/birthday', 'ExportController::exportBirthday');
+
+
 
     //Export Excel
     $routes->get('export-record/all', 'ExportController::exportExcel'); //Export Excel All Records
@@ -58,6 +61,8 @@ $routes->group('osca', ['filter' => 'auth'], function ($routes) {
 
 
     $routes->get('manage-record/print/(:num)', 'PdfController::printID/$1');
+
+
 
     //admin
     $routes->get('users', 'Home::users'); //View Users

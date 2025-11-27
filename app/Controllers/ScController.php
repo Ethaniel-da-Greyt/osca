@@ -48,30 +48,29 @@ class ScController extends BaseController
             $qrcode = $Qr->generateQr($qrcodeHash);
 
             $data = [
-                'lastname'      => $this->request->getPost('lastname'),
-                'firstname'     => $this->request->getPost('firstname'),
-                'middle_name'   => $this->request->getPost('middle_name'),
-                'suffix'        => $this->request->getPost('suffix'),
-                'sex'           => $this->request->getPost('sex'),
-                'barangay'      => $this->request->getPost('barangay'),
-                'unit'          => $this->request->getPost('unit'),
-                'birthdate'     => $birthdate,
-                'age'           => $age,
-                'osca_id'       => $this->request->getPost('osca_id'),
-                'date_issued'   => $this->request->getPost('date_issued') ?: null,
-                'date_applied'  => $this->request->getPost('date_applied') ?: null,
-                'photo'         => $photo,
-                'qrcode'        => $qrcodeHash,
-                'remarks'       => $this->request->getPost('remarks'),
+                'lastname' => $this->request->getPost('lastname'),
+                'firstname' => $this->request->getPost('firstname'),
+                'middle_name' => $this->request->getPost('middle_name'),
+                'suffix' => $this->request->getPost('suffix'),
+                'sex' => $this->request->getPost('sex'),
+                'barangay' => $this->request->getPost('barangay'),
+                'unit' => $this->request->getPost('unit'),
+                'birthdate' => $birthdate,
+                'age' => $age, // auto computed 
+                'osca_id' => $this->request->getPost('osca_id'),
+                'date_issued' => $this->request->getPost('date_issued') ?: null,
+                'date_applied' => $this->request->getPost('date_applied') ?: null,
+                'photo' => $photo,
+                'qrcode' => $qrcodeHash,
+                'remarks' => $this->request->getPost('remarks'),
             ];
 
             $check = $model->where('osca_id', $data['osca_id'])->first();
-            // Prevent duplicate OSCA ID
+
             if ($check) {
-                return redirect()->back()->with('error', 'Osca ID No. Already Added!');
+                return redirect()->back()->with('error', 'OSCA ID already exists!');
             }
 
-            // Insert main record
             if ($model->insert($data)) {
 
                 $idGenerator = new PdfController();
@@ -186,6 +185,7 @@ class ScController extends BaseController
     public function update()
     {
         try {
+
             $model = new MasterListModel();
             $id = $this->request->getPost('id');
 

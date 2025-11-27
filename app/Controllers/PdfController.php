@@ -54,7 +54,7 @@ class PdfController extends BaseController
         }
 
         $activitylog = new ActivityLogController();
-        $activitylog->makeLog($this->userSession(), '', 'Print Osca ID (' . $fullName . '), OSCA ID: ' . $user['osca_id'], '');
+        $activitylog->makeLog($this->userSession(), $user['osca_id'], 'Print Osca ID (' . $fullName . '), OSCA ID: ' . $user['osca_id'], '');
         // Pass base64 image directly to view
         return view("print/print_single_id", [
             'idCardBase64' => $idCardBase64

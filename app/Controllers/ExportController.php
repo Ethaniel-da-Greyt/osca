@@ -398,4 +398,82 @@ class ExportController extends BaseController
 
         $dompdf->stream('OSCA_BARANGAY_' . ucfirst($barangay) . '_LIST.pdf', ['Attachment' => false]);
     }
+
+    // for birthday export
+
+    public function exportBirthday()
+    {
+        $range = $this->request->getPost('date_range');
+        if (!$range) {
+            return redirect()->back()->with('error', 'Please select a date range.');
+        }
+
+        list($start, $end) = explode(' - ', $range);
+
+        $model = new MasterListModel();
+        $data = $model->where("DATE_FORMAT(birthdate, '%m-%d') >=", $start)
+            ->where("DATE_FORMAT(birthdate, '%m-%d') <=", $end)
+            ->orderBy('birthdate', 'ASC')
+            ->findAll();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // --- 1. Set Headers ---
+        $headers = ['A1' => 'OSCA ID', 'B1' => 'Full Name', 'C1' => 'Birthday', 'D1' => 'Age', 'E1' => 'Address'];
+        foreach ($headers as $cell => $text) {
+            $sheet->setCellValue($cell, $text);
+        }
+
+        // --- 2. Style Headers ---
+        $headerStyle = [
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '000000']
+            ], // Dodger Blue
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]
+        ];
+        $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
+
+        // --- 3. Set Column Widths ---
+        $sheet->getColumnDimension('A')->setWidth(12);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(15);
+        $sheet->getColumnDimension('D')->setWidth(6);
+        $sheet->getColumnDimension('E')->setWidth(25);
+
+        // --- 4. Fill Data ---
+        $row = 2;
+        foreach ($data as $item) {
+            $sheet->setCellValue('A' . $row, $item['osca_id']);
+            $sheet->setCellValue('B' . $row, $item['lastname'] . ', ' . $item['firstname'] . ' ' . $item['middle_name']);
+            $sheet->setCellValue('C' . $row, date('M d, Y', strtotime($item['birthdate'])));
+
+            $age = date_diff(date_create($item['birthdate']), date_create('today'))->y;
+            $sheet->setCellValue('D' . $row, $age);
+            $sheet->setCellValue('E' . $row, $item['barangay']);
+
+            // Apply border to each row
+            $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]
+            ]);
+
+            $row++;
+        }
+
+        // --- 5. Prepare Download ---
+        $fileName = 'Birthday_Export_' . date('m-d') . '.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"{$fileName}\"");
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+
 }

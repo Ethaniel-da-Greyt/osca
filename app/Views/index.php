@@ -27,7 +27,7 @@
                     <div class="modal-content">
                         <div class="modal-header bg-dark">
                             <h5 class="modal-title text-white">Barangays in Unit <?= esc($unit_no) ?></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <?php if (!empty($barangaysByUnit[$unit_no])): ?>

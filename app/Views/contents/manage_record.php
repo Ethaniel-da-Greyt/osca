@@ -100,7 +100,9 @@ $qrImg = (file_exists($qrPath))
 
                                     <div class="row py-2 border-bottom">
                                         <div class="col-4 fw-bold text-muted">Full Name</div>
-                                        <div class="col-8"><?= esc($n['firstname'] . ' ' . $n['lastname']) ?></div>
+                                        <div class="col-8">
+                                            <?= esc($n['firstname'] . ' ' . $n['middle_name'] . ' ' . $n['lastname'] . $n['suffix']) ?>
+                                        </div>
                                     </div>
 
                                     <div class="row py-2 border-bottom">
@@ -113,10 +115,6 @@ $qrImg = (file_exists($qrPath))
                                         <div class="col-8"><?= esc(date('m/d/Y', strtotime($n['birthdate']))) ?></div>
                                     </div>
 
-                                    <div class="row py-2 border-bottom">
-                                        <div class="col-4 fw-bold text-muted">Age</div>
-                                        <div class="col-8"><?= esc($n['age']) ?></div>
-                                    </div>
 
                                     <div class="row py-2 border-bottom">
                                         <div class="col-4 fw-bold text-muted">Sex</div>

@@ -29,6 +29,14 @@ $user = $session->get('user');
     <!-- Select2 JS -->
     <script src="<?= base_url('js/select2.full.min.js') ?>"></script>
 
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -109,8 +117,8 @@ $user = $session->get('user');
                 <h6 class="mt-2">Office of the Senior Citizens Affairs</h6>
             </div>
 
-            <?php if ($session->get('isLoggedIn')) : ?>
-                <?php if ($user['role'] == 'user') : ?>
+            <?php if ($session->get('isLoggedIn')): ?>
+                <?php if ($user['role'] == 'user'): ?>
                     <a href="/osca" class="<?= $this->renderSection('dashboard') ?>">
                         <i class="fa fa-gauge"></i> Dashboard
                     </a>
@@ -134,7 +142,7 @@ $user = $session->get('user');
                         <i class="fa-solid fa-plus"></i> Add Records
                     </a>
                     <a href="/osca/export-record" class="<?= $this->renderSection('print') ?>">
-                        <i class="fa fa-gear"></i> Export/Print Records
+                        <i class="fa fa-gear"></i> Exports
                     </a>
                     <a href="/osca/select-batch" class="<?= $this->renderSection('select-batch') ?>">
                         <i class="fa fa-id-badge"></i> Print IDs

@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="card border-0 shadow-sm p-4">
         <div class="text-center text-primary mb-4">
-            <h3 class="fw-bold">Select Format</h3>
+            <h3 class="fw-bold">Export Records</h3>
             <p class="text-muted mb-0">Choose an option below to export or print your records</p>
         </div>
 
@@ -26,23 +26,27 @@
                 </div>
 
                 <div class="col-md-6 col-lg-5">
-                    <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white" data-bs-target="#barangay" data-bs-toggle="modal">
+                    <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white"
+                        data-bs-target="#barangay" data-bs-toggle="modal">
                         <i class="fa-regular fa-file-excel"></i> Export by Barangay in Excel
                     </button>
                 </div>
                 <div class="col-md-6 col-lg-5">
-                    <button class="btn btn-primary w-100 py-4 shadow-sm fw-semibold" data-bs-target="#pdf_barangay" data-bs-toggle="modal">
+                    <button class="btn btn-primary w-100 py-4 shadow-sm fw-semibold" data-bs-target="#pdf_barangay"
+                        data-bs-toggle="modal">
                         <i class="fa-regular fa-file-pdf"></i> Export by Barangay in PDF
                     </button>
                 </div>
 
                 <div class="col-md-6 col-lg-5">
-                    <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white" data-bs-target="#unit" data-bs-toggle="modal">
+                    <button class="btn btn-success w-100 py-4 shadow-sm fw-semibold text-white" data-bs-target="#unit"
+                        data-bs-toggle="modal">
                         <i class="fa-regular fa-file-excel"></i> Export by Unit in Excel
                     </button>
                 </div>
                 <div class="col-md-6 col-lg-5">
-                    <button data-bs-toggle="modal" data-bs-target="#pdf_unit" class="btn btn-primary w-100 py-4 shadow-sm fw-semibold">
+                    <button data-bs-toggle="modal" data-bs-target="#pdf_unit"
+                        class="btn btn-primary w-100 py-4 shadow-sm fw-semibold">
                         <i class="fa-regular fa-file-pdf"></i> Export by Unit in PDF
                     </button>
                 </div>
@@ -62,7 +66,7 @@
                     <div class="modal-body">
                         <select name="barangay" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay --</option>
-                            <?php foreach ($barangay as $b) : ?>
+                            <?php foreach ($barangay as $b): ?>
                                 <option value="<?= esc($b['barangay']) ?>"><?= esc($b['barangay']) ?></option>
                             <?php endforeach ?>
                         </select>
@@ -143,7 +147,7 @@
                     <div class="modal-body">
                         <select name="barangay" id="" class="form-select" required>
                             <option class="text-center">-- Choose Barangay --</option>
-                            <?php foreach ($barangay as $b) : ?>
+                            <?php foreach ($barangay as $b): ?>
                                 <option value="<?= esc($b['barangay']) ?>"><?= esc($b['barangay']) ?></option>
                             <?php endforeach ?>
                         </select>
@@ -157,6 +161,64 @@
         </div>
     </div>
 
+
+    <!-- for export birthday -->
+    <div class="card border-0 shadow-sm p-4">
+        <div class="text-center text-primary mb-4">
+            <h3 class="fw-bold">Export Birthday</h3>
+            <p class="text-muted mb-0">Choose an option below to export or print birthdays</p>
+        </div>
+        <div class="col-md-6 col-lg-5 item-center mx-auto">
+            <button class="btn btn-info w-100 py-4 shadow-sm fw-semibold text-white" data-bs-toggle="modal"
+                data-bs-target="#birthday">
+                <i class="fa-regular fa-calendar"></i> Export Birthday in Excel
+            </button>
+        </div>
+    </div>
+
 </div>
+
+
+<div class="modal fade" id="birthday">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h6 class="modal-title text-white">Select Birthday Range</h6>
+                <span class="btn btn-close" data-bs-dismiss="modal"></span>
+            </div>
+
+            <form action="/osca/export/birthday" method="post">
+                <div class="modal-body">
+
+                    <label class="mb-1 fw-semibold">Birthday Range:</label>
+                    <input type="text" name="date_range" id="birthdayRange" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-info text-white">Export</button>
+                    <span class="btn btn-secondary" data-bs-dismiss="modal">Cancel</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</div>
+<script>
+    $(function () {
+        $('#birthdayRange').daterangepicker({
+            opens: 'center',
+            autoUpdateInput: true,
+            locale: {
+                format: 'MM-DD',
+                cancelLabel: 'Clear'
+            }
+        });
+    });
+</script>
+
+
 
 <?= $this->endSection() ?>

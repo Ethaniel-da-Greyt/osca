@@ -39,6 +39,12 @@ class Home extends BaseController
             $record = new MasterListModel();
             $perPage = 20;
 
+            $isLoggedIn = session()->has('user');
+
+            if (!$isLoggedIn) {
+                return redirect()->to('/login');
+            }
+
             // Define start and end of month
             $startOfMonth = date('Y-m-01');
             $endOfMonth = date('Y-m-t');
